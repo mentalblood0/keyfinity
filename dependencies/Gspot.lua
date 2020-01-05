@@ -319,6 +319,13 @@ end
 Gspot.mousewheel = function(this, x, y)
 	if y ~= 0 and this.mousein then
 		local element = this.mousein
+
+		while not (element.wheelup or element.wheeldown) do
+			if element.parent then
+				element = element.parent
+			end
+		end
+
 		local call = y > 0 and element.wheelup or element.wheeldown
 		if call then
 			local mx, my = this.getmouse()
@@ -562,6 +569,15 @@ Gspot.util = {
 			pos = pos + ppos
 			if this.parent:type() == 'Gspot.element.scrollgroup' and this ~= this.parent.scrollv and this ~= this.parent.scrollh then
 				scissor = this.Gspot:clone(this.parent:getpos())
+
+				if this.parent.bottomEdgeOffset then
+					scissor.y = scissor.y + (this.parent.headerHeight + this.parent.bottomEdgeOffset) * this.parent.pos.h
+					scissor.h = scissor.h - (this.parent.headerHeight + 2 * this.parent.bottomEdgeOffset) * this.parent.pos.h
+				else
+					scissor.y = scissor.y + this.parent.headerHeight * this.parent.pos.h
+					scissor.h = scissor.h - this.parent.headerHeight * this.parent.pos.h
+				end
+
 				if this.parent.scrollv then pos.y = pos.y - this.parent.scrollv.values.current end
 				if this.parent.scrollh then pos.x = pos.x - this.parent.scrollh.values.current end
 			end
@@ -662,8 +678,12 @@ Gspot.util = {
 		child.parent = this
 		child.style = this.Gspot:clone(child.style)
 		setmetatable(child.style, {__index = this.style})
-		if this.scrollh then this.scrollh.values.max = math.max(this:getmaxw() - this.pos.w, 0) end
-		if this.scrollv then this.scrollv.values.max = math.max(this:getmaxh() - this.pos.h, 0) end
+		--if this.scrollh then
+		--	this.scrollh.values.max = math.max(this:getmaxw() - this.pos.w, 0)
+		--end
+		--if this.scrollv then
+		--	this.scrollv.values.max = math.max(this:getmaxh() - this.pos.h, 0)
+		--end
 		return child
 	end,
 
@@ -714,6 +734,11 @@ Gspot.util = {
 	end,
 }
 
+function fontSizeToFitIntoRect(rect, label)
+	print(rect.w, rect.h)
+	return math.min(rect.w / string.len(label) * 2, rect.h / 1.3)
+end
+
 Gspot.element = {
 	load = function(this, Gspot, elementtype, label, pos, parent)
 		assert(Gspot[elementtype], 'invalid element constructor argument : element.elementtype must be an existing element type')
@@ -725,8 +750,38 @@ Gspot.element = {
 		if circ then element.shape = 'circle' else element.shape = 'rect' end
 		if parent then element.style = setmetatable({}, {__index = parent.style})
 		else element.style = setmetatable({}, {__index = Gspot.style}) end
+
+		element.updateFontSize = function(this)
+			newFontSize = nil
+			
+			if this.label then
+				if #this.label then
+					if this.elementtype == "group" then
+						newFontSize = fontSizeToFitIntoRect(this.children[1].pos, this.label)
+					else
+						if this.elementtype == "scrollgroup" then
+							newFontSize = fontSizeToFitIntoRect({w=this.pos.w, h=this.headerHeight*this.pos.h}, this.label)
+						else
+							newFontSize = fontSizeToFitIntoRect(this.pos, this.label)
+						end
+					end
+				end
+			else
+				if this.elementtype == "input" then
+					newFontSize = math.min(this.pos.h / 1.3)
+				end
+			end
+			
+			if newFontSize then
+				this:setfont(newFontSize)
+			end
+	
+		end
+
 		return setmetatable(element, {__index = Gspot[elementtype], __tostring = function(this) return this:type() .. ' (' .. this:getlevel() .. ')' end})
 	end,
+
+	
 }
 setmetatable(Gspot.element, {__call = Gspot.element.load})
 
@@ -1056,11 +1111,11 @@ Gspot.scroll = {
 			this.values.current = this.values.min + ((this.values.max - this.values.min) * ((this.values.axis == 'vertical' and ((math.min(math.max(pos.y, y - math.floor(hs / 2)), (pos.y + pos.h - hs)) - pos.y) / (pos.h - hs))) or ((math.min(math.max(pos.x, x - math.floor(hs / 2)), (pos.x + pos.w - hs)) - pos.x) / (pos.w - hs))))
 		end
 	end,
-	wheelup = function(this)
-		if this.values.axis == 'horizontal' then this:step(-1) else this:step(1) end
+	wheelup = function(this, axis)
+		if axis == 'horizontal' then this:step(-1) else this:step(1) end
 	end,
-	wheeldown = function(this)
-		if this.values.axis == 'horizontal' then this:step(1) else this:step(-1) end
+	wheeldown = function(this, axis)
+		if axis == 'horizontal' then this:step(1) else this:step(-1) end
 	end,
 	keypress = function(this, key)
 		if key == 'left' and this.values.axis == 'horizontal' then
@@ -1079,6 +1134,9 @@ Gspot.scroll = {
 	end,
 	done = function(this) this.Gspot:unfocus() end,
 	draw = function(this, pos)
+		if 1 then
+			return
+		end
 		if this == this.Gspot.mousein or this == this.Gspot.drag or this == this.Gspot.focus then setColor(this.style.default)
 		else setColor(this.style.bg) end
 		this:rect(pos)
@@ -1106,21 +1164,62 @@ Gspot.scroll.rdrag = Gspot.scroll.drag
 setmetatable(Gspot.scroll, {__index = Gspot.util, __call = Gspot.scroll.load})
 
 Gspot.scrollgroup = {
-	load = function(this, Gspot, label, pos, parent, axis)
+	load = function(this, Gspot, label, pos, headerHeight, bottomEdgeOffset, headerBackgroundColor, parent, axis)
 		axis = axis or 'both'
 		local element = Gspot:element('scrollgroup', label, pos, parent)
+		element.bottomEdgeOffset = bottomEdgeOffset
 		element.maxh = 0
+		element.headerHeight = headerHeight or (pos.h / 10)
+		element.headerBackgroundColor = headerBackgroundColor or {0.2, 0.2, 0.2, 1}
 		element = Gspot:add(element)
-		if axis ~= 'horizontal' then element.scrollv = Gspot:scroll(nil, {x = element.pos.w, y = 0, w = element.style.unit, h = element.pos.h}, element, {0, 0, 0, element.style.unit, 'vertical'}) end
-		if axis ~= 'vertical' then element.scrollh = Gspot:scroll(nil, {x = 0, y = element.pos.h, w = element.pos.w, h = element.style.unit}, element, {0, 0, 0, element.style.unit, 'horizontal'}) end
+		if axis == 'vertical' then
+			element.scrollv = Gspot:scroll(nil, {x = element.pos.w, y = 0, w = element.style.unit, h = element.pos.h}, element, {0, 0, 0, element.style.unit, axis='vertical'})
+		end
+		if axis == 'horizontal' then 
+			element.scrollh = Gspot:scroll(nil, {x = 0, y = element.pos.h, w = element.pos.w, h = element.style.unit}, element, {0, 0, 0, element.style.unit, axis='horizontal'})
+		end
 		return element
+	end,
+	wheelup = function(this)
+		if this.scrollv then
+			this.scrollv:wheelup('vertical')
+		else
+			this.scrollh:wheelup('vertical')
+		end
+	end,
+	wheeldown = function(this)
+		if this.scrollv then
+			this.scrollv:wheeldown('vertical')
+		else
+			this.scrollh:wheeldown('vertical')
+		end
 	end,
 	draw = function(this, pos)
 		setColor(this.style.bg)
 		this:drawshape(pos)
+		setColor(this.headerBackgroundColor)
+		this:drawshape({x=pos.x, y=pos.y, w=pos.w, h=this.headerHeight*pos.h})
 		if this.label then
 			setColor(this.style.labelfg or this.style.fg)
 			lgprint(this.label, pos.x + ((pos.w - this.style.font:getWidth(this.label)) / 2), pos.y)
+		end
+	end,
+	updateScrollEdges = function(this)
+		if this.scrollv then
+			local bottomEdge = 0
+			for index,child in next,this.children,nil do
+				local currentChildBottomEdge = child.pos.y + child.pos.h
+				if currentChildBottomEdge > bottomEdge then
+					bottomEdge = currentChildBottomEdge
+				end
+			end
+			if this.bottomEdgeOffset then
+				print(this.bottomEdgeOffset)
+				this.scrollv.values.max = bottomEdge - this.pos.h * (1 - this.bottomEdgeOffset)
+			else
+				this.scrollv.values.max = bottomEdge - this.pos.h
+			end
+			this.scrollv.values.min = 0
 		end
 	end,
 }

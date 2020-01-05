@@ -2,9 +2,12 @@
 
 TLfres = require "dependencies/tlfres"
 gui = require "dependencies/Gspot"
+IPL = require "dependencies/IPL"
+
 autostack = require "autostack"
-local math = require "math"
-local string = require "string"
+
+math = require "math"
+string = require "string"
 
 ----------------------
 
@@ -24,8 +27,8 @@ function addState(name)
 end
 
 addState("mainMenu")
-addState("createUserScreen")
 addState("chooseUserProfileScreen")
+addState("createUserScreen")
 
 currentState = states.chooseUserProfileScreen
 
@@ -58,29 +61,9 @@ function setElements()
   updateElementsFontSize()
 end
 
-function fontSizeToFitIntoRect(rect, label)
-  return math.min(rect.w / string.len(label) * 2, rect.h / 1.3)
-end
-
 function updateElementsFontSize()
   for elementName,element in next,currentElements,nil do
-    local newFontSize
-    if labelLength ~= 0 then
-      if element.elementtype == "group" then
-        newFontSize = fontSizeToFitIntoRect(element.children[1].pos, element.label)
-      else
-        if element.elementtype == "scrollgroup" then
-          newFontSize = fontSizeToFitIntoRect(element.children[2].pos, element.label)
-        else
-          newFontSize = fontSizeToFitIntoRect(element.pos, element.label)
-        end
-      end
-    else
-      if element.elementtype == "input" then
-        newFontSize = math.min(element.pos.h / 1.3)
-      end
-    end
-    element:setfont(newFontSize)
+    element:updateFontSize()
   end
 end
 
@@ -124,6 +107,16 @@ end
 
 love.textinput = function(text)
   gui:textinput(text)
+end
+
+love.wheelmoved = function(x, y)
+  local button
+  if y > 0 then
+    button = 'wu'
+  else
+    button = 'wd'
+  end
+  gui:mousewheel(x, y)
 end
 
 ------------------------

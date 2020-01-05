@@ -1,0 +1,25 @@
+-- Persistent Data
+local multiRefObjects = {
+
+} -- multiRefObjects
+local obj1 = {
+	["4"] = {
+	};
+	["1"] = {
+	};
+	["Sample"] = {
+	};
+	["dick"] = {
+	};
+	["3"] = {
+	};
+	["Sample User"] = {
+	};
+	["2"] = {
+	};
+	["lalala"] = {
+	};
+	["fhj;sdahbuasp"] = {
+	};
+}
+return obj1

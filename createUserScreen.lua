@@ -1,5 +1,15 @@
 local createUserScreen = {resourcesDir = "createUserScreen"}
 
+function createUserButtonClick()
+    userName = currentElements[4].value
+    if userProfiles[userName] == nil then
+        userProfiles[userName] = {}
+        IPL.store(userProfilesFileName, userProfiles)
+    end
+
+    switchToState("chooseUserProfileScreen")
+end
+
 function createUserScreen:updateElementsPositionAndSize()
     local groupWidth = windowWidth / 1.5
     local groupHeight = windowHeight / 8 * 6
@@ -14,6 +24,7 @@ function createUserScreen:enter()
     currentElements[4] = gui:input("Name:", {}, currentElements[1], "Sample User")
     
     currentElements[5] = gui:button("Add", {}, currentElements[1])
+    currentElements[5].click = function(this) createUserButtonClick() end
 
     currentElements[6] = gui:button("Cancel", {}, currentElements[1])
     currentElements[6].click = function(this) switchToState("chooseUserProfileScreen") end
