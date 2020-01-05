@@ -3,11 +3,13 @@
 TLfres = require "dependencies/tlfres"
 gui = require "dependencies/Gspot"
 IPL = require "dependencies/IPL"
+textGenerator = require "textGenerator"
 
 autostack = require "autostack"
 
 math = require "math"
 string = require "string"
+os = require "os"
 
 ----------------------
 
@@ -23,30 +25,32 @@ windowHeight = 1080
 states = {}
 
 function addState(name)
-  states[name] = require(name)
+    states[name] = require(name)
 end
 
 addState("mainMenu")
 addState("chooseUserProfileScreen")
 addState("createUserScreen")
-
-currentState = states.chooseUserProfileScreen
+addState("game")
 
 function clearCurrentElements()
-  local count = #currentElements
-  for i=1,count do
-    if currentElements[i] ~= nil then
-      gui:rem(currentElements[i])
-    else
-      currentElements[i] = nil
+    local count = #currentElements
+    for i=1,count do
+        if currentElements[i] ~= nil then
+            gui:rem(currentElements[i])
+        else
+            currentElements[i] = nil
+        end
     end
-  end
 end
 
 function switchToState(stateName)
-  clearCurrentElements()
-  currentState = states[stateName]
-  currentState:enter()
+    print(stateName)
+    clearCurrentElements()
+    currentState = states[stateName]
+    print('current state is', currentState)
+    currentState:enter()
+    love.graphics.setBackgroundColor({0.6, 0.3, 0.6, 1})
 end
 
 --------------------------------------
@@ -56,20 +60,20 @@ end
 currentElements = {}
 
 function setElements()
-  setProperElementsFont()
-  currentState:updateElementsPositionAndSize()
-  updateElementsFontSize()
+    setProperElementsFont()
+    currentState:updateElementsPositionAndSize()
+    updateElementsFontSize()
 end
 
 function updateElementsFontSize()
-  for elementName,element in next,currentElements,nil do
-    element:updateFontSize()
-  end
+    for elementName,element in next,currentElements,nil do
+        element:updateFontSize()
+    end
 end
 
 function setProperElementsFont()
-  local currentFontPath = "resources" .. currentState.resourcesDir .. "/font.ttf"
-  for elementName,element in next,currentElements,nil do element:setfont(currentFontPath) end
+    local currentFontPath = "resources" .. currentState.resourcesDir .. "/font.ttf"
+    for elementName,element in next,currentElements,nil do element:setfont(currentFontPath) end
 end
 
 ----------------------------
@@ -77,46 +81,48 @@ end
 -----LOVE CALLBACKS-----
 
 love.load = function()
-  love.window.setMode(windowWidth, windowHeight, {fullscreen = false, resizable = true})
-  switchToState("chooseUserProfileScreen")
+    math.randomseed(os.time())
+
+    love.window.setMode(windowWidth, windowHeight, {fullscreen = false, resizable = true})
+    switchToState("chooseUserProfileScreen")
 end
 
 love.update = function(dt)
-  currentState:update(dt)
+    currentState:update(dt)
 end
 
 love.draw = function()
-  currentState.draw()
+    currentState.draw()
 end
 
 love.resize = function(newWidth, newHeight)
-  windowWidth = newWidth
-  windowHeight = newHeight
-  
-  currentState:updateElementsPositionAndSize()
-  updateElementsFontSize()
+    windowWidth = newWidth
+    windowHeight = newHeight
+    
+    currentState:updateElementsPositionAndSize()
+    updateElementsFontSize()
 end
 
 love.mousepressed = function(x, y, button)
-  gui:mousepress(x, y, button)
+    gui:mousepress(x, y, button)
 end
 
 love.keypressed = function(key, scancode, isrepeat)
-  gui:keypress(scancode)
+    gui:keypress(scancode)
+    if currentState.keypressed then
+        currentState:keypressed(key, scancode, isrepeat)
+    end
 end
 
 love.textinput = function(text)
-  gui:textinput(text)
+    gui:textinput(text)
+    if currentState.keypressed then
+        currentState:textInput(text)
+    end
 end
 
 love.wheelmoved = function(x, y)
-  local button
-  if y > 0 then
-    button = 'wu'
-  else
-    button = 'wd'
-  end
-  gui:mousewheel(x, y)
+    gui:mousewheel(x, y)
 end
 
 ------------------------

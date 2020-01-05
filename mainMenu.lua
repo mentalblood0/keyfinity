@@ -1,30 +1,41 @@
 local mainMenu = {resourcesDir = "mainMenu"}
 
-function updateElementsPositionAndSize()
+function mainMenu:updateElementsPositionAndSize()
     local buttonsWidth = windowWidth/4
-    local buttonsHeight = windowHeight/4
-  
+    local buttonsHeight = windowHeight/8
+
     local firstEntityPositionX = buttonsWidth/2
-    local firstEntityPositionY = buttonsHeight/2
+    local firstEntityPositionY = buttonsHeight
     for key,entity in ipairs(currentElements) do
-      entity.pos = {x=firstEntityPositionX, y=firstEntityPositionY + buttonsHeight*1.6*(key - 1), w=buttonsWidth, h=buttonsHeight}
+        if entity.label == currentUserProfileName then
+            break
+        end
+        entity.pos = {x=firstEntityPositionX, y=firstEntityPositionY + buttonsHeight*1.6*(key - 1), w=buttonsWidth, h=buttonsHeight}
     end
-  end
-  
-  function enter()
+
+    currentElements[3].pos = {x=0, y=0, w=windowWidth, h=buttonsHeight/2}
+end
+
+function mainMenu:enter()
     currentElements[1] = gui:button("start")
+    currentElements[1].click = function(this) switchToState("game") end
+
     currentElements[2] = gui:button("exit")
-    currentElements[2].click = function(this) love.event.quit() end
-  
+    currentElements[2].click = function(this) switchToState("chooseUserProfileScreen") end
+
+    currentElements[3] = gui:button("Hello, " .. currentUserProfileName .. "!")
+
     setElements()
-  end
-  
-  function draw()
+end
+
+function mainMenu:draw()
     TLfres.beginRendering(windowWidth, windowHeight)
     gui:draw()
     TLfres.endRendering()
-  end
-  
-  function update(dt)
+end
+
+function mainMenu:update(dt)
     gui:update(dt)
-  end
+end
+
+return mainMenu
