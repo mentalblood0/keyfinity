@@ -25,6 +25,9 @@ function mainMenu:enter()
 
     currentElements[3] = gui:button("Hello, " .. currentUserProfileName .. "!")
 
+    currentElements[4] = gui:button("Select mode")
+    currentElements[4].click = function(this) switchToState("selectModeScreen") end
+
     setElements()
 end
 

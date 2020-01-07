@@ -4,12 +4,20 @@ local multiRefObjects = {
 } -- multiRefObjects
 local obj1 = {
 	["4"] = {
+		["modes"] = {
+			["Sample Mode"] = {
+				["textLineLength"] = 50;
+			};
+			["short"] = {
+				["textLineLength"] = 5;
+			};
+		};
 	};
 	["1"] = {
 	};
 	["Sample"] = {
 	};
-	["dick"] = {
+	["lalala"] = {
 	};
 	["3"] = {
 	};
@@ -17,7 +25,7 @@ local obj1 = {
 	};
 	["2"] = {
 	};
-	["lalala"] = {
+	["dick"] = {
 	};
 	["fhj;sdahbuasp"] = {
 	};

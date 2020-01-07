@@ -11,7 +11,7 @@ function textGenerator:randomSymbols(numberOfSymbols)
     local numberOfPossibleSymbols = #possibleSymbols
 
     local text = ""
-    for symbolNumber = 0, numberOfSymbols do
+    for symbolNumber = 1, numberOfSymbols do
         local newSymbol = getCharByIndex(possibleSymbols, math.random(numberOfPossibleSymbols))
         text = text .. newSymbol
     end

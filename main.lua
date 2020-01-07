@@ -22,16 +22,22 @@ windowHeight = 1080
 
 -----STATES (aka scenes in Unity)-----
 
+statesDirectory = "states"
+
 states = {}
 
 function addState(name)
-    states[name] = require(name)
+    states[name] = require(statesDirectory .. "/" .. name)
 end
 
-addState("mainMenu")
-addState("chooseUserProfileScreen")
-addState("createUserScreen")
-addState("game")
+function searchAndAddStates()
+    local files = love.filesystem.getDirectoryItems("states")
+
+    for fileNumber, fileName in ipairs(files) do
+        local fileNameWithoutExtension = string.gsub(fileName, ".lua", "")
+        addState(fileNameWithoutExtension)
+    end
+end
 
 function clearCurrentElements()
     local count = #currentElements
@@ -83,6 +89,8 @@ end
 love.load = function()
     math.randomseed(os.time())
 
+    searchAndAddStates()
+    loadSavedUserProfiles()
     love.window.setMode(windowWidth, windowHeight, {fullscreen = false, resizable = true})
     switchToState("chooseUserProfileScreen")
 end

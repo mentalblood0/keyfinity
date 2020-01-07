@@ -1,7 +1,5 @@
 local game = {resourcesDir = "game"}
 
-textLineLength = 30
-
 currentTextLine = ""
 currentSymbolNumber = 1
 
@@ -25,7 +23,9 @@ function game:updateElementsPositionAndSize()
 end
 
 function game:enter()
-    currentTextLine = textGenerator:randomSymbols(textLineLength)
+    print("user:", currentUserProfileName, "mode:", currentModeName)
+    currentTextLine = textGenerator:randomSymbols(userProfiles[currentUserProfileName]["modes"][currentModeName]["textLineLength"])
+    currentSymbolNumber = 1
 
     currentElements[1] = gui:button("x")
     currentElements[1].click = function(this) switchToState("mainMenu") end
@@ -64,7 +64,7 @@ end
 function game:keypressed(key, scancode, isrepeat)
     if key == "return" then
         if currentSymbolNumber > #currentTextLine then
-            currentTextLine = textGenerator:randomSymbols(textLineLength)
+            currentTextLine = textGenerator:randomSymbols(userProfiles[currentUserProfileName]["modes"][currentModeName]["textLineLength"])
             currentSymbolNumber = 1
             currentElements[2].label = currentTextLine
             alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)

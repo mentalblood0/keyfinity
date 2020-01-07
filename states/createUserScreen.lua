@@ -1,7 +1,7 @@
 local createUserScreen = {resourcesDir = "createUserScreen"}
 
 function createUserButtonClick()
-    userName = currentElements[4].value
+    local userName = currentElements[4].value
     if userProfiles[userName] == nil then
         userProfiles[userName] = {}
         IPL.store(userProfilesFileName, userProfiles)

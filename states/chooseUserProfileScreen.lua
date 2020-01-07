@@ -5,7 +5,7 @@ userProfilesFileName = "userProfiless.txt"
 currentUserProfileName = nil
 
 function loadSavedUserProfiles()
-    info = love.filesystem.getInfo(userProfilesFileName)
+    local info = love.filesystem.getInfo(userProfilesFileName)
     if info ~= nil then
         userProfiles = IPL.load(userProfilesFileName)
     else
@@ -35,13 +35,12 @@ function chooseUserProfileScreen:enter()
     currentElements[2].click = function(this) switchToState("createUserScreen") end
     
     loadSavedUserProfiles()
-    print(#userProfiles)
     currentElementNumber = 3
     for userName,userProfile in next,userProfiles,nil do
         currentElements[currentElementNumber] = gui:button(userName, {}, currentElements[1])
         currentElements[currentElementNumber].style.hilite = {0.65, 0.65, 0.2, 1}
         currentElements[currentElementNumber].style.focus = {0.75, 0.75, 0.2, 1}
-        currentElements[currentElementNumber].click = function(this) currentUserProfileName = this.label; switchToState("mainMenu") end
+        currentElements[currentElementNumber].click = function(this) currentUserProfileName = this.label; switchToState("selectModeScreen") end
         currentElementNumber = currentElementNumber + 1
     end
     
