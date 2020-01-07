@@ -1,15 +1,37 @@
 local createModeScreen = {resourcesDir = "createModeScreen"}
 
-currentModeName = nil
+modeParameters = {}
+convertedModeParameters = {}
+
+function addModeParameter(name, internalName, valueType, defaultValue)
+    currentElements[#currentElements + 1] = gui:input(name, {}, currentElements[1], defaultValue)
+    modeParameters[internalName] = {}
+    modeParameters[internalName]["element"] = currentElements[#currentElements]
+    modeParameters[internalName]["valueType"] = valueType
+end
+
+function convertParameters()
+    convertedModeParameters = {}
+    for parameterInternalName, parameter in pairs(modeParameters) do
+        if parameter["valueType"] == "integer" then
+            convertedModeParameters[parameterInternalName] = tonumber(parameter["element"].value)
+            if convertedModeParameters[parameterInternalName] == nil then
+                return false
+            end
+        elseif parameter["valueType" == "string"] then
+            convertedModeParameters[parameterInternalName] = parameter["element"].value
+        end
+    end
+    return true
+end
 
 function createModeButtonClick()
-    print(currentUserProfileName, userProfiles[currentUserProfileName])
-    local modeName = currentElements[4].value
-    local textLineLength = tonumber(currentElements[5].value)
-
-    if textLineLength == nil then
+    local convertedSuccessfully = convertParameters()
+    if not convertedSuccessfully then
         return
     end
+
+    local modeName = currentElements[4].value
 
     if userProfiles[currentUserProfileName]["modes"] == nil then
         userProfiles[currentUserProfileName]["modes"] = {}
@@ -19,7 +41,11 @@ function createModeButtonClick()
     else
         return
     end
-    userProfiles[currentUserProfileName]["modes"][modeName]["textLineLength"] = textLineLength
+
+    for parameterName, parameterValue in pairs(convertedModeParameters) do
+        userProfiles[currentUserProfileName]["modes"][modeName][parameterName] = parameterValue
+    end
+
     IPL.store(userProfilesFileName, userProfiles)
 
     switchToState("selectModeScreen")
@@ -33,12 +59,15 @@ function createModeScreen:updateElementsPositionAndSize()
 end
 
 function createModeScreen:enter()
+    modeParameters = {}
+    convertedModeParameters = {}
+
     currentElements[1] = gui:group("New Mode", {}, nil)
     currentElements[1].style.bg = {0.4, 0.4, 0.4, 1}
 
     currentElements[4] = gui:input("Name:", {}, currentElements[1], "Sample Mode")
 
-    currentElements[5] = gui:input("Text line length:", {}, currentElements[1], "50")
+    addModeParameter("Text line length:", "textLineLength", "integer", 50)
     
     currentElements[6] = gui:button("Add", {}, currentElements[1])
     currentElements[6].click = function(this) createModeButtonClick() end

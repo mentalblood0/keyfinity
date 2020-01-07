@@ -1,8 +1,6 @@
 local selectModeScreen = {resourcesDir = "selectModeScreen"}
 
-userProfiles = {}
-userProfilesFileName = "userProfiless.txt"
-currentUserProfileName = nil
+currentModeName = nil
 
 function selectModeScreen:updateElementsPositionAndSize()
     local scrollgroupWidth = windowWidth / 1.5
