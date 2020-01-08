@@ -3,11 +3,11 @@ local createModeScreen = {resourcesDir = "createModeScreen"}
 modeParameters = {}
 convertedModeParameters = {}
 
-function addModeParameter(name, internalName, valueType, defaultValue)
+function addModeParameter(parentElement, name, internalName, valueType, defaultValue)
     if valueType == "boolean" then
-        currentElements[#currentElements + 1] = gui:checkbox(name, {}, currentElements[1], defaultValue)
+        currentElements[internalName .. "Checkbox"] = gui:checkbox(name, {}, parentElement, defaultValue)
     else
-        currentElements[#currentElements + 1] = gui:input(name, {}, currentElements[1], defaultValue)
+        currentElements[internalName .. "Input"] = gui:input(name, {}, parentElement, defaultValue)
     end
 
     modeParameters[internalName] = {}
@@ -59,29 +59,34 @@ function createModeButtonClick()
 end
 
 function createModeScreen:updateElementsPositionAndSize()
-    local groupWidth = windowWidth / 1.5
+    currentElements["modeNameInput"].pos = {x = windowWidth / 32, y = windowHeight / 32, w = windowWidth - windowWidth / 32 * 2, h = windowHeight / 32}
+
+    local groupWidth = windowWidth / 3.5
     local groupHeight = windowHeight / 8 * 6
-    currentElements[1].pos = {x=windowWidth / 6, y=windowHeight / 8, w=groupWidth, h=groupHeight}
-    autostack:stackChildren(currentElements[1], nil, 0.1, 0.1, 0.5)
+    currentElements["appearanceParametersScrollgroup"].pos = {x = windowWidth / 32, y = windowHeight / 8 / 1.5, w = groupWidth, h = groupHeight}
+    autostack:stackChildren(currentElements["appearanceParametersScrollgroup"], nil, 1 / 32, 1 / 32, 0.5)
+
+    currentElements["addModeButton"].pos = {x = windowWidth - windowWidth / 32 - windowWidth / 4 * 1.5, y = windowHeight / 16 * 14, w = windowWidth / 4 * 1.5, h = windowHeight / 16 * 1.5}
+    currentElements["cancelCreatingModeButton"].pos = {x = windowWidth / 32, y = windowHeight / 16 * 14, w = windowWidth / 4 * 1.5, h = windowHeight / 16 * 1.5}
 end
 
 function createModeScreen:enter()
     modeParameters = {}
     convertedModeParameters = {}
 
-    currentElements[1] = gui:group("New Mode", {}, nil)
-    currentElements[1].style.bg = {0.4, 0.4, 0.4, 1}
+    currentElements["modeNameInput"] = gui:input("Name:", {}, nil, "Sample Mode")
 
-    currentElements[4] = gui:input("Name:", {}, currentElements[1], "Sample Mode")
+    currentElements["addModeButton"] = gui:button("Add", {})
+    currentElements["addModeButton"].click = function(this) createModeButtonClick() end
 
-    addModeParameter("Text line length:", "textLineLength", "integer", 50)
-    addModeParameter("Press Enter at the end of the line", "enterAtTheEndOfTheLine", "boolean", true)
-    
-    currentElements[6] = gui:button("Add", {}, currentElements[1])
-    currentElements[6].click = function(this) createModeButtonClick() end
+    currentElements["cancelCreatingModeButton"] = gui:button("Cancel", {})
+    currentElements["cancelCreatingModeButton"].click = function(this) switchToState("selectModeScreen") end
 
-    currentElements[7] = gui:button("Cancel", {}, currentElements[1])
-    currentElements[7].click = function(this) switchToState("selectModeScreen") end
+    currentElements["appearanceParametersScrollgroup"] = gui:scrollgroup("Appearance parameters", {}, 1 / 10, 1 / 8 / 2, {0.35, 0.3, 0.55, 1}, nil, "vertical")
+    currentElements["appearanceParametersScrollgroup"].style.bg = {0.4, 0.4, 0.4, 1}
+
+    addModeParameter(currentElements["appearanceParametersScrollgroup"], "Text line length:", "textLineLength", "integer", 50)
+    addModeParameter(currentElements["appearanceParametersScrollgroup"], "Press Enter at the end of the line", "enterAtTheEndOfTheLine", "boolean", true)
 
     setElements()
 end

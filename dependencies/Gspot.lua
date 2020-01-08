@@ -734,9 +734,14 @@ Gspot.util = {
 	end,
 }
 
-function fontSizeToFitIntoRect(rect, label)
-	print(rect.w, rect.h)
-	return math.min(rect.w / string.len(label) * 2, rect.h / 1.3)
+function fontSizeToFitIntoRect(rect, element)
+	local fontSize = math.floor(math.min(rect.w / string.len(element.label) * 2, rect.h / 1.3))
+	element:setfont(fontSize)
+	while element.style.font:getWidth(element.label) >= rect.w do
+		fontSize = fontSize - 1
+		element:setfont(fontSize)
+	end
+	return fontSize
 end
 
 Gspot.element = {
@@ -751,35 +756,53 @@ Gspot.element = {
 		if parent then element.style = setmetatable({}, {__index = parent.style})
 		else element.style = setmetatable({}, {__index = Gspot.style}) end
 
-		element.updateFontSize = function(this)
-			local newFontSize = nil
-			
+		element.getProperFontSize = function(this)
 			if this.label then
 				if #this.label then
 					if this.elementtype == "group" then
-						newFontSize = fontSizeToFitIntoRect(this.children[1].pos, this.label)
+						return fontSizeToFitIntoRect(this.children[1].pos, this)
 					else
 						if this.elementtype == "scrollgroup" then
-							newFontSize = fontSizeToFitIntoRect({w=this.pos.w, h=this.headerHeight*this.pos.h}, this.label)
+							return fontSizeToFitIntoRect({w=this.pos.w, h=this.headerHeight*this.pos.h}, this)
 						else
 							if this.elementtype == "checkbox" then
-								newFontSize = fontSizeToFitIntoRect({w = this.pos.w - this.pos.h * 1.5, h = this.pos.h}, this.label)
+								local boxSize = math.floor(this.pos.h)
+								local fontSize = fontSizeToFitIntoRect({w = this.pos.w - boxSize * 1.5, h = this.pos.h}, this)
+								local iterationsNumber = 0
+								while fontSize ~= boxSize do
+									if fontSize < boxSize then
+										boxSize = boxSize - 1
+									else
+										boxSize = boxSize + 1
+									end
+									fontSize = fontSizeToFitIntoRect({w = this.pos.w - boxSize * 1.5, h = this.pos.h}, this)
+									iterationsNumber = iterationsNumber + 1
+								end
+								print(iterationsNumber, "iterations")
+								print("end")
+								this.boxSize = boxSize
+								return fontSize
 							else
-								newFontSize = fontSizeToFitIntoRect(this.pos, this.label)
+								return fontSizeToFitIntoRect(this.pos, this)
 							end
 						end
 					end
 				end
 			else
 				if this.elementtype == "input" then
-					newFontSize = math.min(this.pos.h / 1.3)
+					return math.min(this.pos.h / 1.3)
 				end
 			end
-			
+		end
+
+		element.updateFontSize = function(this)
+			if this.fixedFontSize then
+				return
+			end
+			local newFontSize = this:getProperFontSize()
 			if newFontSize then
 				this:setfont(newFontSize)
 			end
-	
 		end
 
 		return setmetatable(element, {__index = Gspot[elementtype], __tostring = function(this) return this:type() .. ' (' .. this:getlevel() .. ')' end})
@@ -961,8 +984,10 @@ Gspot.checkbox = {
 	draw = function(this, pos)
 		if this == this.Gspot.mousein then setColor(this.style.hilite)
 		else setColor(this.style.default) end
-		local minSideLength = math.min(pos.w, pos.h)
-		local boxPosition = {x = pos.x, y = pos.y, w = minSideLength, h = minSideLength}
+		if not this.boxSize then
+			this:getProperFontSize()
+		end
+		local boxPosition = {x = pos.x, y = pos.y + (pos.h - this.boxSize) / 2, w = this.boxSize, h = this.boxSize}
 		this:drawshape(boxPosition)
 		if this.value then
 			setColor(this.style.fg)

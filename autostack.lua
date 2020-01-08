@@ -26,6 +26,18 @@ function autostack:stackChildren(element, childHeight, spaceLeft, spaceRight, sp
     if element.elementtype == "scrollgroup" then
         element:updateScrollEdges()
     end
+
+    local minFontSize = 256
+    for i = firstChild, childrenNumber do
+        local currentChildProperFontSize = element.children[i]:getProperFontSize()
+        if minFontSize > currentChildProperFontSize then
+            minFontSize = currentChildProperFontSize
+        end
+    end
+    for i = firstChild, childrenNumber do
+        element.children[i]:setfont(minFontSize)
+        element.children[i].fixedFontSize = true
+    end
 end
 
 return autostack
