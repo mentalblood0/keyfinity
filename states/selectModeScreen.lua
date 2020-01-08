@@ -5,30 +5,27 @@ currentModeName = nil
 function selectModeScreen:updateElementsPositionAndSize()
     local scrollgroupWidth = windowWidth / 1.5
     local scrollgroupHeight = windowHeight / 8 * 5
-    currentElements[1].pos = {x=windowWidth / 6, y=windowHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight}
+    currentElements.modesScrollgroup.pos = {x=windowWidth / 6, y=windowHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight}
+    autostack:stackChildren(currentElements.modesScrollgroup, scrollgroupHeight / 8, 0.1, 0.1, 0.5)
 
-    currentElements[2].pos = {x=windowWidth / 6, y=windowHeight / 8 * 6 + scrollgroupHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight / 8}
-
-    autostack:stackChildren(currentElements[1], scrollgroupHeight / 8, 0.1, 0.1, 0.5)
+    currentElements["createModeButton"].pos = {x=windowWidth / 6, y=windowHeight / 8 * 6 + scrollgroupHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight / 8}
 end
 
 function selectModeScreen:enter()
-    currentElements[1] = gui:scrollgroup("Select mode", {}, 1 / 10, 1 / 8 / 2, {0.35, 0.3, 0.55, 1}, nil, "vertical")
-    currentElements[1].style.bg = {0.2, 0.3, 0.5, 1}
+    currentElements.modesScrollgroup = gui:scrollgroup("Select mode", {}, 1 / 10, 1 / 8 / 2, {0.35, 0.3, 0.55, 1}, nil, "vertical")
+    currentElements.modesScrollgroup.style.bg = {0.2, 0.3, 0.5, 1}
     
-    currentElements[2] = gui:button("Create mode", {})
-    currentElements[2].style.default = {0.2, 0.6, 0.3, 1}
-    currentElements[2].style.hilite = {0.2, 0.7, 0.2}
-    currentElements[2].click = function(this) switchToState("createModeScreen") end
+    currentElements.createModeButton = gui:button("Create mode", {})
+    currentElements.createModeButton.style.default = {0.2, 0.6, 0.3, 1}
+    currentElements.createModeButton.style.hilite = {0.2, 0.7, 0.2}
+    currentElements.createModeButton.click = function(this) switchToState("createModeScreen") end
     
-    currentElementNumber = 3
     if userProfiles[currentUserProfileName]["modes"] then
         for modeName,mode in next,userProfiles[currentUserProfileName]["modes"],nil do
-            currentElements[currentElementNumber] = gui:button(modeName, {}, currentElements[1])
-            currentElements[currentElementNumber].style.hilite = {0.65, 0.65, 0.2, 1}
-            currentElements[currentElementNumber].style.focus = {0.75, 0.75, 0.2, 1}
-            currentElements[currentElementNumber].click = function(this) currentModeName = this.label; switchToState("game") end
-            currentElementNumber = currentElementNumber + 1
+            currentElements[modeName .. "ModeButton"] = gui:button(modeName, {}, currentElements["modesScrollgroup"])
+            currentElements[modeName .. "ModeButton"].style.hilite = {0.65, 0.65, 0.2, 1}
+            currentElements[modeName .. "ModeButton"].style.focus = {0.75, 0.75, 0.2, 1}
+            currentElements[modeName .. "ModeButton"].click = function(this) currentModeName = this.label; switchToState("game") end
         end
     end
     

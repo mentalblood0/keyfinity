@@ -40,12 +40,11 @@ function searchAndAddStates()
 end
 
 function clearCurrentElements()
-    local count = #currentElements
-    for i=1,count do
-        if currentElements[i] ~= nil then
-            gui:rem(currentElements[i])
+    for key, value in pairs(currentElements) do
+        if key ~= nil then
+            gui:rem(currentElements[key])
         else
-            currentElements[i] = nil
+            currentElements[key] = nil
         end
     end
 end

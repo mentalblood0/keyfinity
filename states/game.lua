@@ -12,38 +12,38 @@ end
 
 function game:updateElementsPositionAndSize()
     local exitGameButtonSize = math.min(windowWidth, windowHeight) / 32
-    currentElements[1].pos = {x=0, y=0, w=exitGameButtonSize, h=exitGameButtonSize}
+    currentElements.exitButton.pos = {x=0, y=0, w=exitGameButtonSize, h=exitGameButtonSize}
 
-    currentElements[2].pos = {w=windowWidth, h=windowHeight/16}
-    currentElements[2]:updateFontSize()
-    alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
+    currentElements.currentTextLineText.pos = {w=windowWidth, h=windowHeight/16}
+    currentElements.currentTextLineText:updateFontSize()
+    alignTextSymbolToCenter(currentElements.currentTextLineText, currentSymbolNumber, windowWidth / 2, windowHeight / 2)
 
     if #currentTextLine > 1 then
-        currentElements[3].pos = {x = windowWidth / 2 - 1, y = currentElements[2].pos.y - currentElements[2].pos.h / 2, w = 2, h = currentElements[2].pos.h / 2}
-        currentElements[4].pos = {x = windowWidth / 2 - 1, y = currentElements[2].pos.y + currentElements[2].pos.h, w = 2, h = currentElements[2].pos.h / 2}
+        currentElements.upperPointerHalf.pos = {x = windowWidth / 2 - 1, y = currentElements.currentTextLineText.pos.y - currentElements.currentTextLineText.pos.h / 2, w = 2, h = currentElements.currentTextLineText.pos.h / 2}
+        currentElements.lowerPointerHalf.pos = {x = windowWidth / 2 - 1, y = currentElements.currentTextLineText.pos.y + currentElements.currentTextLineText.pos.h, w = 2, h = currentElements.currentTextLineText.pos.h / 2}
     end
 end
 
 function generateNewTextLine()
     currentTextLine = textGenerator:randomSymbols(userProfiles[currentUserProfileName]["modes"][currentModeName]["textLineLength"])
     currentSymbolNumber = 1
-    currentElements[2].label = currentTextLine
+    currentElements.currentTextLineText.label = currentTextLine
 end
 
 function game:enter()
-    currentElements[1] = gui:button("x")
-    currentElements[1].click = function(this) switchToState("mainMenu") end
+    currentElements.exitButton = gui:button("x")
+    currentElements.exitButton.click = function(this) switchToState("mainMenu") end
 
-    currentElements[2] = gui:text(currentTextLine, {}, nil)
+    currentElements.currentTextLineText = gui:text(currentTextLine, {}, nil)
     generateNewTextLine()
 
     if #currentTextLine > 1 then
-        currentElements[3] = gui:button("")
-        currentElements[3].style.default = {0.2, 0.6, 0.3, 1}
-        currentElements[3].style.hilite = {0.2, 0.6, 0.3, 1}
-        currentElements[4] = gui:button("")
-        currentElements[4].style.default = {0.2, 0.6, 0.3, 1}
-        currentElements[4].style.hilite = {0.2, 0.6, 0.3, 1}
+        currentElements.upperPointerHalf = gui:button("")
+        currentElements.upperPointerHalf.style.default = {0.2, 0.6, 0.3, 1}
+        currentElements.upperPointerHalf.style.hilite = {0.2, 0.6, 0.3, 1}
+        currentElements.lowerPointerHalf = gui:button("")
+        currentElements.lowerPointerHalf.style.default = {0.2, 0.6, 0.3, 1}
+        currentElements.lowerPointerHalf.style.hilite = {0.2, 0.6, 0.3, 1}
     end
 
     setElements()
@@ -64,11 +64,11 @@ function game:textInput(text)
         if text == getCharByIndex(currentTextLine, currentSymbolNumber) then
             if (currentSymbolNumber == #currentTextLine) and userProfiles[currentUserProfileName]["modes"][currentModeName]["enterAtTheEndOfTheLine"] == false then
                 generateNewTextLine()
-                alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
+                alignTextSymbolToCenter(currentElements.currentTextLineText, currentSymbolNumber, windowWidth / 2, windowHeight / 2)
                 return
             end
             currentSymbolNumber = currentSymbolNumber + 1
-            alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
+            alignTextSymbolToCenter(currentElements.currentTextLineText, currentSymbolNumber, windowWidth / 2, windowHeight / 2)
         end
     end
 end
@@ -78,8 +78,8 @@ function game:keypressed(key, scancode, isrepeat)
         if currentSymbolNumber > #currentTextLine then
             currentTextLine = textGenerator:randomSymbols(userProfiles[currentUserProfileName]["modes"][currentModeName]["textLineLength"])
             currentSymbolNumber = 1
-            currentElements[2].label = currentTextLine
-            alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
+            currentElements.currentTextLineText.label = currentTextLine
+            alignTextSymbolToCenter(currentElements.currentTextLineText, currentSymbolNumber, windowWidth / 2, windowHeight / 2)
         end
     end
 end

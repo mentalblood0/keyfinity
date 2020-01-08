@@ -13,20 +13,20 @@ function mainMenu:updateElementsPositionAndSize()
         entity.pos = {x=firstEntityPositionX, y=firstEntityPositionY + buttonsHeight*1.6*(key - 1), w=buttonsWidth, h=buttonsHeight}
     end
 
-    currentElements[3].pos = {x=0, y=0, w=windowWidth, h=buttonsHeight/2}
+    currentElements.greeting.pos = {x=0, y=0, w=windowWidth, h=buttonsHeight/2}
 end
 
 function mainMenu:enter()
-    currentElements[1] = gui:button("start")
-    currentElements[1].click = function(this) switchToState("game") end
+    currentElements.startButton = gui:button("start")
+    currentElements.startButton.click = function(this) switchToState("game") end
 
-    currentElements[2] = gui:button("exit")
-    currentElements[2].click = function(this) switchToState("chooseUserProfileScreen") end
+    currentElements.exitButton = gui:button("exit")
+    currentElements.exitButton.click = function(this) switchToState("chooseUserProfileScreen") end
 
-    currentElements[3] = gui:button("Hello, " .. currentUserProfileName .. "!")
+    currentElements.greeting = gui:button("Hello, " .. currentUserProfileName .. "!")
 
-    currentElements[4] = gui:button("Select mode")
-    currentElements[4].click = function(this) switchToState("selectModeScreen") end
+    currentElements.selectModeButton = gui:button("Select mode")
+    currentElements.selectModeButton.click = function(this) switchToState("selectModeScreen") end
 
     setElements()
 end

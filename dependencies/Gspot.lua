@@ -768,7 +768,6 @@ Gspot.element = {
 							if this.elementtype == "checkbox" then
 								local boxSize = math.floor(this.pos.h)
 								local fontSize = fontSizeToFitIntoRect({w = this.pos.w - boxSize * 1.5, h = this.pos.h}, this)
-								local iterationsNumber = 0
 								while fontSize ~= boxSize do
 									if fontSize < boxSize then
 										boxSize = boxSize - 1
@@ -776,10 +775,7 @@ Gspot.element = {
 										boxSize = boxSize + 1
 									end
 									fontSize = fontSizeToFitIntoRect({w = this.pos.w - boxSize * 1.5, h = this.pos.h}, this)
-									iterationsNumber = iterationsNumber + 1
 								end
-								print(iterationsNumber, "iterations")
-								print("end")
 								this.boxSize = boxSize
 								return fontSize
 							else
