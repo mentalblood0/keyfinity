@@ -8,7 +8,7 @@ function autostack:stackChildren(element, childHeight, spaceLeft, spaceRight, sp
 
     local nextElementPosition = {x = element.pos.w * spaceLeft, y = childHeight * spaceBetween, w = element.pos.w * (1 - spaceLeft - spaceRight), h = childHeight}
     if element.elementtype == "group" then
-        nextElementPosition.y = childHeight * spaceBetween + childHeight
+        nextElementPosition.y = element.headerHeight * element.pos.h + (element.pos.h - element.headerHeight * element.pos.h - ((spaceBetween * childHeight + childHeight) * childrenNumber + spaceBetween * childHeight))
     end
 
     local firstChild

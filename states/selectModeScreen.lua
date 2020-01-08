@@ -8,7 +8,7 @@ function selectModeScreen:updateElementsPositionAndSize()
     currentElements.modesScrollgroup.pos = {x=windowWidth / 6, y=windowHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight}
     autostack:stackChildren(currentElements.modesScrollgroup, scrollgroupHeight / 8, 0.1, 0.1, 0.5)
 
-    currentElements["createModeButton"].pos = {x=windowWidth / 6, y=windowHeight / 8 * 6 + scrollgroupHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight / 8}
+    currentElements.createModeButton.pos = {x=windowWidth / 6, y=windowHeight / 8 * 6 + scrollgroupHeight / 8, w=scrollgroupWidth, h=scrollgroupHeight / 8}
 end
 
 function selectModeScreen:enter()

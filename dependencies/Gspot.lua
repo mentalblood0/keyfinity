@@ -760,10 +760,10 @@ Gspot.element = {
 			if this.label then
 				if #this.label then
 					if this.elementtype == "group" then
-						return fontSizeToFitIntoRect(this.children[1].pos, this)
+						return fontSizeToFitIntoRect({w = this.pos.w, h = this.headerHeight * this.pos.h}, this)
 					else
 						if this.elementtype == "scrollgroup" then
-							return fontSizeToFitIntoRect({w=this.pos.w, h=this.headerHeight*this.pos.h}, this)
+							return fontSizeToFitIntoRect({w = this.pos.w, h = this.headerHeight * this.pos.h}, this)
 						else
 							if this.elementtype == "checkbox" then
 								local boxSize = math.floor(this.pos.h)
@@ -821,12 +821,17 @@ end
 -- elements
 
 Gspot.group = {
-	load = function(this, Gspot, label, pos, parent)
-		return Gspot:add(Gspot:element('group', label, pos, parent))
+	load = function(this, Gspot, label, pos, headerHeight, headerBackgroundColor, parent)
+		local element = Gspot:element('group', label, pos, parent)
+		element.headerHeight = headerHeight or (pos.h / 10)
+		element.headerBackgroundColor = headerBackgroundColor or {0.2, 0.2, 0.2, 1}
+		return Gspot:add(element)
 	end,
 	draw = function(this, pos)
 		setColor(this.style.bg)
 		this:drawshape(pos)
+		setColor(this.headerBackgroundColor)
+		this:drawshape({x = pos.x, y = pos.y, w = pos.w, h = this.headerHeight * pos.h})
 		if this.label then
 			setColor(this.style.labelfg or this.style.fg)
 			lgprint(this.label, pos.x + ((pos.w - this.style.font:getWidth(this.label)) / 2), pos.y)
