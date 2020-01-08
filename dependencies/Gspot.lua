@@ -752,7 +752,7 @@ Gspot.element = {
 		else element.style = setmetatable({}, {__index = Gspot.style}) end
 
 		element.updateFontSize = function(this)
-			newFontSize = nil
+			local newFontSize = nil
 			
 			if this.label then
 				if #this.label then
@@ -762,7 +762,11 @@ Gspot.element = {
 						if this.elementtype == "scrollgroup" then
 							newFontSize = fontSizeToFitIntoRect({w=this.pos.w, h=this.headerHeight*this.pos.h}, this.label)
 						else
-							newFontSize = fontSizeToFitIntoRect(this.pos, this.label)
+							if this.elementtype == "checkbox" then
+								newFontSize = fontSizeToFitIntoRect({w = this.pos.w - this.pos.h * 1.5, h = this.pos.h}, this.label)
+							else
+								newFontSize = fontSizeToFitIntoRect(this.pos, this.label)
+							end
 						end
 					end
 				end
@@ -957,14 +961,16 @@ Gspot.checkbox = {
 	draw = function(this, pos)
 		if this == this.Gspot.mousein then setColor(this.style.hilite)
 		else setColor(this.style.default) end
-		this:drawshape(pos)
+		local minSideLength = math.min(pos.w, pos.h)
+		local boxPosition = {x = pos.x, y = pos.y, w = minSideLength, h = minSideLength}
+		this:drawshape(boxPosition)
 		if this.value then
 			setColor(this.style.fg)
-			this:drawshape(this.Gspot:pos({x = pos.x + (pos.w / 4), y = pos.y + (pos.h / 4), w = pos.w / 2, h = pos.h / 2, r = pos.r and pos.r / 2}))
+			this:drawshape({x = boxPosition.x + (boxPosition.w / 4), y = boxPosition.y + (boxPosition.h / 4), w = boxPosition.w / 2, h = boxPosition.h / 2})
 		end
 		if this.label then
 			setColor(this.style.labelfg or this.style.fg)
-			lgprint(this.label, pos.x + pos.w + (this.style.unit / 2), pos.y + ((this.pos.h - this.style.font:getHeight()) / 2))
+			lgprint(this.label, boxPosition.x + boxPosition.w * 1.5, pos.y + ((this.pos.h - this.style.font:getHeight()) / 2))
 		end
 	end,
 }

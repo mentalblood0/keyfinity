@@ -5,6 +5,10 @@ local multiRefObjects = {
 local obj1 = {
 	["4"] = {
 		["modes"] = {
+			["1"] = {
+				["enterAtTheEndOfTheLine"] = false;
+				["textLineLength"] = 1;
+			};
 			["short"] = {
 				["textLineLength"] = 5;
 			};

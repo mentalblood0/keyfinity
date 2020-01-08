@@ -18,26 +18,33 @@ function game:updateElementsPositionAndSize()
     currentElements[2]:updateFontSize()
     alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
 
-    currentElements[3].pos = {x = windowWidth / 2 - 1, y = currentElements[2].pos.y - currentElements[2].pos.h / 2, w = 2, h = currentElements[2].pos.h / 2}
-    currentElements[4].pos = {x = windowWidth / 2 - 1, y = currentElements[2].pos.y + currentElements[2].pos.h, w = 2, h = currentElements[2].pos.h / 2}
+    if #currentTextLine > 1 then
+        currentElements[3].pos = {x = windowWidth / 2 - 1, y = currentElements[2].pos.y - currentElements[2].pos.h / 2, w = 2, h = currentElements[2].pos.h / 2}
+        currentElements[4].pos = {x = windowWidth / 2 - 1, y = currentElements[2].pos.y + currentElements[2].pos.h, w = 2, h = currentElements[2].pos.h / 2}
+    end
+end
+
+function generateNewTextLine()
+    currentTextLine = textGenerator:randomSymbols(userProfiles[currentUserProfileName]["modes"][currentModeName]["textLineLength"])
+    currentSymbolNumber = 1
+    currentElements[2].label = currentTextLine
 end
 
 function game:enter()
-    print("user:", currentUserProfileName, "mode:", currentModeName)
-    currentTextLine = textGenerator:randomSymbols(userProfiles[currentUserProfileName]["modes"][currentModeName]["textLineLength"])
-    currentSymbolNumber = 1
-
     currentElements[1] = gui:button("x")
     currentElements[1].click = function(this) switchToState("mainMenu") end
 
     currentElements[2] = gui:text(currentTextLine, {}, nil)
+    generateNewTextLine()
 
-    currentElements[3] = gui:button("")
-    currentElements[3].style.default = {0.2, 0.6, 0.3, 1}
-    currentElements[3].style.hilite = {0.2, 0.6, 0.3, 1}
-    currentElements[4] = gui:button("")
-    currentElements[4].style.default = {0.2, 0.6, 0.3, 1}
-    currentElements[4].style.hilite = {0.2, 0.6, 0.3, 1}
+    if #currentTextLine > 1 then
+        currentElements[3] = gui:button("")
+        currentElements[3].style.default = {0.2, 0.6, 0.3, 1}
+        currentElements[3].style.hilite = {0.2, 0.6, 0.3, 1}
+        currentElements[4] = gui:button("")
+        currentElements[4].style.default = {0.2, 0.6, 0.3, 1}
+        currentElements[4].style.hilite = {0.2, 0.6, 0.3, 1}
+    end
 
     setElements()
 end
@@ -55,6 +62,11 @@ end
 function game:textInput(text)
     if currentSymbolNumber <= #currentTextLine then
         if text == getCharByIndex(currentTextLine, currentSymbolNumber) then
+            if (currentSymbolNumber == #currentTextLine) and userProfiles[currentUserProfileName]["modes"][currentModeName]["enterAtTheEndOfTheLine"] == false then
+                generateNewTextLine()
+                alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
+                return
+            end
             currentSymbolNumber = currentSymbolNumber + 1
             alignTextSymbolToCenter(currentElements[2], currentSymbolNumber, windowWidth / 2, windowHeight / 2)
         end

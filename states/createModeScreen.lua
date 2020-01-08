@@ -4,7 +4,12 @@ modeParameters = {}
 convertedModeParameters = {}
 
 function addModeParameter(name, internalName, valueType, defaultValue)
-    currentElements[#currentElements + 1] = gui:input(name, {}, currentElements[1], defaultValue)
+    if valueType == "boolean" then
+        currentElements[#currentElements + 1] = gui:checkbox(name, {}, currentElements[1], defaultValue)
+    else
+        currentElements[#currentElements + 1] = gui:input(name, {}, currentElements[1], defaultValue)
+    end
+
     modeParameters[internalName] = {}
     modeParameters[internalName]["element"] = currentElements[#currentElements]
     modeParameters[internalName]["valueType"] = valueType
@@ -18,7 +23,9 @@ function convertParameters()
             if convertedModeParameters[parameterInternalName] == nil then
                 return false
             end
-        elseif parameter["valueType" == "string"] then
+        elseif parameter["valueType"] == "string" then
+            convertedModeParameters[parameterInternalName] = parameter["element"].value
+        elseif parameter["valueType"] == "boolean" then
             convertedModeParameters[parameterInternalName] = parameter["element"].value
         end
     end
@@ -68,6 +75,7 @@ function createModeScreen:enter()
     currentElements[4] = gui:input("Name:", {}, currentElements[1], "Sample Mode")
 
     addModeParameter("Text line length:", "textLineLength", "integer", 50)
+    addModeParameter("Press Enter at the end of the line", "enterAtTheEndOfTheLine", "boolean", true)
     
     currentElements[6] = gui:button("Add", {}, currentElements[1])
     currentElements[6].click = function(this) createModeButtonClick() end
