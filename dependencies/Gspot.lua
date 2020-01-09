@@ -737,7 +737,7 @@ Gspot.util = {
 function fontSizeToFitIntoRect(rect, element)
 	local fontSize = math.floor(math.min(rect.w / string.len(element.label) * 2, rect.h / 1.3))
 	element:setfont(fontSize)
-	while element.style.font:getWidth(element.label) >= rect.w do
+	while element.style.font:getWidth(element.label) > rect.w do
 		fontSize = fontSize - 1
 		element:setfont(fontSize)
 	end
