@@ -5,18 +5,20 @@ local multiRefObjects = {
 local obj1 = {
 	["4"] = {
 		["modes"] = {
-			["1"] = {
+			["the biggest"] = {
+				["fontSize"] = 150;
 				["enterAtTheEndOfTheLine"] = false;
-				["textLineLength"] = 1;
-			};
-			["short"] = {
-				["textLineLength"] = 5;
+				["textLineLength"] = 20;
 			};
 			["Sample Mode"] = {
-				["textLineLength"] = 50;
+				["fontSize"] = 10;
+				["enterAtTheEndOfTheLine"] = false;
+				["textLineLength"] = 15;
 			};
-			["lol"] = {
-				["textLineLength"] = 1;
+			["bigger one"] = {
+				["fontSize"] = 50;
+				["enterAtTheEndOfTheLine"] = false;
+				["textLineLength"] = 15;
 			};
 		};
 	};
@@ -24,7 +26,7 @@ local obj1 = {
 	};
 	["Sample"] = {
 	};
-	["dick"] = {
+	["lalala"] = {
 	};
 	["3"] = {
 	};
@@ -32,7 +34,7 @@ local obj1 = {
 	};
 	["2"] = {
 	};
-	["lalala"] = {
+	["dick"] = {
 	};
 	["fhj;sdahbuasp"] = {
 	};

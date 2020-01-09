@@ -885,8 +885,10 @@ Gspot.text = {
 	end,
 	draw = function(this, pos)
 		setColor(this.style.labelfg or this.style.fg)
-		if this.autosize then lgprint(this.label, pos.x + (this.style.unit / 4), pos.y + (this.style.unit / 8))
-		else lgprintf(this.label, pos.x + (this.style.unit / 4), pos.y + (this.style.unit / 8), (this.autosize and pos.w) or pos.w - (this.style.unit / 2), 'left') end
+		
+		for letterNumber = 1, #this.label do
+			lgprint(string.sub(this.label, letterNumber, letterNumber), pos.x + this.style.font:getWidth(string.sub(this.label, 1, letterNumber - 1)), pos.y)
+		end
 	end,
 }
 setmetatable(Gspot.text, {__index = Gspot.util, __call = Gspot.text.load})

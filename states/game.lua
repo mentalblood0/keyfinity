@@ -13,7 +13,7 @@ function game:updateElementsPositionAndSize()
     local exitGameButtonSize = math.min(windowWidth, windowHeight) / 32
     currentElements.exitButton.pos = {x=0, y=0, w=exitGameButtonSize, h=exitGameButtonSize}
 
-    currentElements.currentTextLine.pos = {w=windowWidth, h=windowHeight/16}
+    currentElements.currentTextLine.pos = {w=windowWidth, h=userProfiles[currentUserProfileName].modes[currentModeName].fontSize}
     currentElements.currentTextLine:updateFontSize()
     alignTextSymbolToCenter(currentElements.currentTextLine, currentSymbolNumber, windowWidth / 2, windowHeight / 2)
 

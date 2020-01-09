@@ -4,14 +4,18 @@ modeParameters = {}
 convertedModeParameters = {}
 
 function addModeParameter(parentElement, name, internalName, valueType, defaultValue)
+    local elementKey
+
     if valueType == "boolean" then
-        currentElements[internalName .. "Checkbox"] = gui:checkbox(name, {}, parentElement, defaultValue)
+        elementKey = internalName .. "Checkbox"
+        currentElements[elementKey] = gui:checkbox(name, {}, parentElement, defaultValue)
     else
-        currentElements[internalName .. "Input"] = gui:input(name, {}, parentElement, defaultValue)
+        elementKey = internalName .. "Input"
+        currentElements[elementKey] = gui:input(name, {}, parentElement, defaultValue)
     end
 
     modeParameters[internalName] = {}
-    modeParameters[internalName].element = currentElements[#currentElements]
+    modeParameters[internalName].element = currentElements[elementKey]
     modeParameters[internalName].valueType = valueType
 end
 
@@ -38,7 +42,7 @@ function createModeButtonClick()
         return
     end
 
-    local modeName = currentElements[4].value
+    local modeName = currentElements.modeNameInput.value
 
     if userProfiles[currentUserProfileName].modes == nil then
         userProfiles[currentUserProfileName].modes = {}
@@ -78,13 +82,14 @@ function createModeScreen:enter()
     currentElements.cancelCreatingModeButton = gui:button("Cancel", {})
     currentElements.cancelCreatingModeButton.click = function(this) switchToState("selectModeScreen") end
 
-    currentElements.modeParametersScrollgroup = gui:scrollgroup("Appearance parameters", {}, 1 / 10, 1 / 8 / 2, {0.35, 0.3, 0.55, 1}, nil, "vertical")
+    currentElements.modeParametersScrollgroup = gui:scrollgroup("Set up new mode:", {}, 1 / 10, 1 / 8 / 2, {0.35, 0.3, 0.55, 1}, nil, "vertical")
     currentElements.modeParametersScrollgroup.style.bg = {0.4, 0.4, 0.4, 1}
 
     currentElements.modeNameInput = gui:input("Name:", {}, currentElements.modeParametersScrollgroup, "Sample Mode")
 
     addModeParameter(currentElements.modeParametersScrollgroup, "Text line length:", "textLineLength", "integer", 50)
     addModeParameter(currentElements.modeParametersScrollgroup, "Press Enter at the end of the line", "enterAtTheEndOfTheLine", "boolean", true)
+    addModeParameter(currentElements.modeParametersScrollgroup, "Font size:", "fontSize", "integer", 10)
 
     setElements()
 end
