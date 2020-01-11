@@ -135,6 +135,12 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		this.font = font
 	end
 
+	object.SetProperFontSize = function(this, fontFileName)
+		this.font = love.graphics.newFont(fontFileName, fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this.text))
+	end
+	
+	object:SetFont(loveframes.basicfont)
+
 	return object
 	
 end

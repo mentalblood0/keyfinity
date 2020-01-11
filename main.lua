@@ -1,14 +1,16 @@
 -----REQUIREMENTS-----
 
+math = require "math"
+string = require "string"
+os = require "os"
+fonting = require "fonting"
+
 gui = require "loveframes"
 
 TLfres = require "dependencies/tlfres"
 IPL = require "dependencies/IPL"
-textGenerator = require "textGenerator"
 
-math = require "math"
-string = require "string"
-os = require "os"
+textGenerator = require "textGenerator"
 
 ----------------------
 
