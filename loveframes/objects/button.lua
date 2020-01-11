@@ -14,8 +14,6 @@ local newobject = loveframes.NewObject("button", "loveframes_object_button", tru
 	- desc: initializes the object
 --]]---------------------------------------------------------
 function newobject:initialize()
-	print("INITIALIZE")
-	print("self is", self)
 	
 	self.type = "button"
 	self.text = "Button"

@@ -61,6 +61,7 @@ function switchToState(stateName)
     clearCurrentElements()
     currentState = states[stateName]
     currentState:enter()
+    currentState:updateElementsPositionAndSize()
     love.graphics.setBackgroundColor({0.1, 0.4, 0.3, 1})
 end
 
@@ -92,7 +93,7 @@ love.load = function()
 
     searchAndAddStates()
     loadSavedUserProfiles()
-    love.window.setMode(windowWidth, windowHeight, {fullscreen = false, resizable = false})
+    love.window.setMode(windowWidth, windowHeight, {fullscreen = false, resizable = true})
     switchToState("chooseUserProfileScreen")
 end
 
@@ -109,6 +110,7 @@ end
 love.resize = function(newWidth, newHeight)
     windowWidth = newWidth
     windowHeight = newHeight
+    currentState:updateElementsPositionAndSize()
 end
 
 love.mousepressed = function(x, y, button)

@@ -1,17 +1,27 @@
 local chooseUserProfileScreen = {resourcesDir = "chooseUserProfileScreen"}
 
-function chooseUserProfileScreen:enter()
-    currentElements.chooseUserScrollgroup = gui.Create("list")
+function chooseUserProfileScreen:updateElementsPositionAndSize()
     currentElements.chooseUserScrollgroup:SetPos(windowWidth / 32, windowHeight / 32)
     currentElements.chooseUserScrollgroup:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 24)
     currentElements.chooseUserScrollgroup:SetPadding(10)
     currentElements.chooseUserScrollgroup:SetSpacing(10)
 
-    currentElements.addUserButton = gui.Create("button")
     currentElements.addUserButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addUserButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
-    currentElements.addUserButton:SetText("Add user")
     currentElements.addUserButton:SetProperFontSize("font.ttf")
+
+    local userButtons = currentElements.chooseUserScrollgroup:GetChildren()
+    for key, value in next, userButtons, nil do
+        userButtons[key]:SetProperFontSize("font.ttf")
+    end
+    currentElements.chooseUserScrollgroup:SetEqualChildrenFontSize("font.ttf")
+end
+
+function chooseUserProfileScreen:enter()
+    currentElements.chooseUserScrollgroup = gui.Create("list")
+
+    currentElements.addUserButton = gui.Create("button")
+    currentElements.addUserButton:SetText("Add user")
     currentElements.addUserButton.OnClick = function(this) switchToState("createUserScreen") end
 
     loadSavedUserProfiles()
@@ -19,8 +29,6 @@ function chooseUserProfileScreen:enter()
         local newButton = gui.Create("button")
         newButton:SetHeight(100)
         newButton:SetText(userName)
-        newButton:SetFont(love.graphics.newFont(40))
-        newButton:SetProperFontSize("font.ttf")
         newButton.OnClick = function(this) currentUserProfileName = this.label; switchToState("selectModeScreen") end
 
         currentElements.chooseUserScrollgroup:AddItem(newButton)
