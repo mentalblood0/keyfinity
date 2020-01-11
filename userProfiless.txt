@@ -6,19 +6,19 @@ local obj1 = {
 	["4"] = {
 		["modes"] = {
 			["the biggest"] = {
-				["fontSize"] = 150;
-				["enterAtTheEndOfTheLine"] = false;
 				["textLineLength"] = 20;
+				["enterAtTheEndOfTheLine"] = false;
+				["fontSize"] = 150;
 			};
 			["Sample Mode"] = {
-				["fontSize"] = 10;
-				["enterAtTheEndOfTheLine"] = false;
 				["textLineLength"] = 15;
+				["enterAtTheEndOfTheLine"] = false;
+				["fontSize"] = 10;
 			};
 			["bigger one"] = {
-				["fontSize"] = 50;
-				["enterAtTheEndOfTheLine"] = false;
 				["textLineLength"] = 15;
+				["enterAtTheEndOfTheLine"] = false;
+				["fontSize"] = 50;
 			};
 		};
 	};
@@ -26,7 +26,9 @@ local obj1 = {
 	};
 	["Sample"] = {
 	};
-	["lalala"] = {
+	["dick"] = {
+	};
+	["FUUUUUUUUUUUUUCK"] = {
 	};
 	["3"] = {
 	};
@@ -34,7 +36,7 @@ local obj1 = {
 	};
 	["2"] = {
 	};
-	["dick"] = {
+	["lalala"] = {
 	};
 	["fhj;sdahbuasp"] = {
 	};

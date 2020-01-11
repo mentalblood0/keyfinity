@@ -144,19 +144,30 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	if name == "loveframes_object_list" then
+
 		object.SetEqualChildrenFontSize = function(this, fontFileName)
 			local children = this:GetChildren()
 			local minFontSize = 0
 			for key, value in next, children, nil do
-				local currentChildFontSize = children[key]:getProperFontSize(fontFileName)
-				if (currentChildFontSize < minFontSize) or (minFontSize == 0) then
-					minFontSize = currentChildFontSize
+				if children[key].text then
+					local currentChildFontSize = children[key]:getProperFontSize(fontFileName)
+					if (currentChildFontSize < minFontSize) or (minFontSize == 0) then
+						minFontSize = currentChildFontSize
+					end
 				end
 			end
 			for key, value in next, children, nil do
 				children[key]:SetFont(love.graphics.newFont(fontFileName, minFontSize))
 			end
 		end
+
+		object.SetChildrenHeight = function(this, height)
+			local children = this:GetChildren()
+			for key, value in next, children, nil do
+				children[key]:SetHeight(height)
+			end
+		end
+
 	end
 	
 	object:SetFont(loveframes.basicfont)

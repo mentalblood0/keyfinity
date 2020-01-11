@@ -1,24 +1,21 @@
 local chooseUserProfileScreen = {resourcesDir = "chooseUserProfileScreen"}
 
 function chooseUserProfileScreen:updateElementsPositionAndSize()
-    currentElements.chooseUserScrollgroup:SetPos(windowWidth / 32, windowHeight / 32)
-    currentElements.chooseUserScrollgroup:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 24)
-    currentElements.chooseUserScrollgroup:SetPadding(windowWidth / 64)
-    currentElements.chooseUserScrollgroup:SetSpacing(windowHeight / 64)
+    currentElements.chooseUserList:SetPos(windowWidth / 32, windowHeight / 32)
+    currentElements.chooseUserList:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 24)
+    currentElements.chooseUserList:SetPadding(windowWidth / 64)
+    currentElements.chooseUserList:SetSpacing(windowHeight / 64)
 
     currentElements.addUserButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addUserButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
     currentElements.addUserButton:SetProperFontSize("font.ttf")
 
-    local userButtons = currentElements.chooseUserScrollgroup:GetChildren()
-    for key, userButton in next, userButtons, nil do
-        userButton:SetHeight(windowHeight / 10)
-    end
-    currentElements.chooseUserScrollgroup:SetEqualChildrenFontSize("font.ttf")
+    currentElements.chooseUserList:SetChildrenHeight(windowHeight / 10)
+    currentElements.chooseUserList:SetEqualChildrenFontSize("font.ttf")
 end
 
 function chooseUserProfileScreen:enter()
-    currentElements.chooseUserScrollgroup = gui.Create("list")
+    currentElements.chooseUserList = gui.Create("list")
 
     currentElements.addUserButton = gui.Create("button")
     currentElements.addUserButton:SetText("Add user")
@@ -31,7 +28,7 @@ function chooseUserProfileScreen:enter()
         newButton:SetText(userName)
         newButton.OnClick = function(this) currentUserProfileName = this.label; switchToState("selectModeScreen") end
 
-        currentElements.chooseUserScrollgroup:AddItem(newButton)
+        currentElements.chooseUserList:AddItem(newButton)
     end
 end
 
