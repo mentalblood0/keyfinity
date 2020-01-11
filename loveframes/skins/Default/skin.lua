@@ -120,7 +120,7 @@ function skin.frame(object)
 	local hover = object:IsTopChild()
 	local name = object:GetName()
 	local icon = object:GetIcon()
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	
 	local body   = skin.controls.color_back0
 	local top    = hover and skin.controls.color_active or skin.controls.color_fore0
@@ -171,7 +171,8 @@ function skin.button(object)
 	local height = object:GetHeight()
 	local hover = object:GetHover()
 	local text = object:GetText()
-	local font = skin.controls.smallfont
+	print("object.font is", object.font)
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local twidth = font:getWidth(object.text)
 	local theight = font:getHeight(object.text)
 	local down = object:GetDown()
@@ -343,7 +344,7 @@ function skin.imagebutton(object)
 	local image = object:GetImage()
 	local imagecolor = object.imagecolor or skin.controls.color_image
 	local down = object.down
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local twidth = font:getWidth(object.text)
 	local theight = font:getHeight(object.text)
 	local checked = object.checked
@@ -405,7 +406,7 @@ function skin.progressbar(object)
 	local max = object:GetMax()
 	local text = object:GetText()
 	local barwidth = object:GetBarWidth()
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local twidth = font:getWidth(text)
 	local theight = font:getHeight("m")
 		
@@ -746,7 +747,7 @@ function skin.tabbutton(object)
 	local tabnumber = object:GetTabNumber()
 	local parent = object:GetParent()
 	local ptabnumber = parent:GetTabNumber()
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local twidth = font:getWidth(object.text)
 	local theight = font:getHeight(object.text)
 	local imagewidth = 0
@@ -822,7 +823,7 @@ function skin.multichoice(object)
 	local text = object:GetText()
 	local choice = object:GetChoice()
 	local image = skin.images["multichoice-arrow.png"]
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local theight = font:getHeight("a")
 	local hover = object:GetHover()
 	--local down = object:GetDown()
@@ -907,7 +908,7 @@ function skin.multichoicerow(object)
 	local width = object:GetWidth() - 4
 	local height = object:GetHeight()
 	local text = object:GetText()
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local back, fore
 	
 	love.graphics.setFont(font)
@@ -1264,7 +1265,7 @@ function skin.collapsiblecategory(object)
 	local height = object:GetHeight()
 	local text = object:GetText()
 	local open = object:GetOpen()
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	
 	love.graphics.setColor(skin.controls.color_back1)
 	love.graphics.rectangle("fill", x, y, width, height)
@@ -1325,7 +1326,7 @@ function skin.columnlistheader(object)
 	local height = object:GetHeight()
 	local hover = object:GetHover()
 	local down = object.down
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local theight = font:getHeight(object.name)
 	
 	local name = ParseHeaderText(object:GetName(), x, width, x + width/2)
@@ -1585,7 +1586,7 @@ function skin.form(object)
 	local height = object:GetHeight()
 	local topmargin = object.topmargin
 	local name = object.name
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local textcolor = skin.controls.form_text_color
 	local twidth = font:getWidth(name)
 	
@@ -1637,7 +1638,7 @@ function skin.menuoption(object)
 	local text = object:GetText()
 	local icon = object:GetIcon()
 	local option_type = object.option_type
-	local font = skin.controls.smallfont
+	local font = object.font or loveframes.skins[loveframes.config["ACTIVESKIN"]].controls.smallfont
 	local twidth = font:getWidth(text)
 	
 	

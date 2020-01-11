@@ -130,7 +130,11 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		object = loveframes.class(name)
 		objects[id] = object
 	end
-	
+
+	object.SetFont = function(this, font)
+		this.font = font
+	end
+
 	return object
 	
 end

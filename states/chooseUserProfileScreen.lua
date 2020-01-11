@@ -11,13 +11,15 @@ function chooseUserProfileScreen:enter()
     currentElements.addUserButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addUserButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
     currentElements.addUserButton:SetText("Add user")
+    currentElements.addUserButton:SetFont(love.graphics.newFont(40))
     currentElements.addUserButton.OnClick = function(this) switchToState("createUserScreen") end
 
     loadSavedUserProfiles()
     for userName,userProfile in next,userProfiles,nil do
         local newButton = gui.Create("button")
-        newButton:SetSize(100, 100)
+        newButton:SetHeight(100)
         newButton:SetText(userName)
+        newButton:SetFont(love.graphics.newFont(40))
         newButton.OnClick = function(this) currentUserProfileName = this.label; switchToState("selectModeScreen") end
 
         currentElements.chooseUserScrollgroup:AddItem(newButton)
