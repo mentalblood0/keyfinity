@@ -581,11 +581,7 @@ end
 	- func: SetHeight()
 	- desc: sets the object's height
 --]]---------------------------------------------------------
-function newobject:SetHeight(height)
-	
-	return
-	
-end
+
 
 --[[---------------------------------------------------------
 	- func: SetSize(width, height, relative)

@@ -140,6 +140,7 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	object.SetProperFontSize = function(this, fontFileName)
+		this.fontFileName = fontFileName
 		this.font = love.graphics.newFont(fontFileName, this:getProperFontSize(fontFileName))
 	end
 
@@ -168,6 +169,14 @@ function loveframes.NewObject(id, name, inherit_from_base)
 			end
 		end
 
+	elseif name == "loveframes_object_text" then
+		object.SetHeight = function(this, height)
+			this.height = height
+			if not this.fontFileName then
+				this.fontFileName = currentState.defaultFontFileName
+			end
+			this:SetProperFontSize(this.fontFileName)
+		end
 	end
 	
 	object:SetFont(loveframes.basicfont)

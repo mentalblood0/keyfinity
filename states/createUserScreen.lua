@@ -1,4 +1,4 @@
-local createUserScreen = {resourcesDir = "createUserScreen"}
+local createUserScreen = {defaultFontFileName = "font.ttf"}
 
 function createUserButtonClick()
     local userName = currentElements.nameInput:GetText()
@@ -16,6 +16,8 @@ end
 function createUserScreen:updateElementsPositionAndSize()
     currentElements.newUserList:SetPos(windowWidth / 32, windowHeight / 32)
     currentElements.newUserList:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 30)
+    currentElements.newUserList:SetPadding(windowWidth / 64)
+    currentElements.newUserList:SetSpacing(windowHeight / 64)
 
     currentElements.newUserList:SetChildrenHeight(windowHeight / 10)
     currentElements.newUserList:SetEqualChildrenFontSize("font.ttf")
@@ -23,6 +25,10 @@ end
 
 function createUserScreen:enter()
     currentElements.newUserList = gui.Create("list")
+
+    currentElements.nameText = gui.Create("text")
+    currentElements.nameText:SetText("User Name:")
+    currentElements.newUserList:AddItem(currentElements.nameText)
 
     currentElements.nameInput = gui.Create("textinput")
     currentElements.newUserList:AddItem(currentElements.nameInput)
