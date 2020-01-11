@@ -10,10 +10,6 @@ function chooseUserProfileScreen:updateElementsPositionAndSize()
     currentElements.addUserButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
     currentElements.addUserButton:SetProperFontSize("font.ttf")
 
-    local userButtons = currentElements.chooseUserScrollgroup:GetChildren()
-    for key, value in next, userButtons, nil do
-        userButtons[key]:SetProperFontSize("font.ttf")
-    end
     currentElements.chooseUserScrollgroup:SetEqualChildrenFontSize("font.ttf")
 end
 
