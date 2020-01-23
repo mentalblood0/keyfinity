@@ -577,6 +577,14 @@ function newobject:SetWidth(width, relative)
 	
 end
 
+function newobject:SetHeight(newHeight)
+	self.height = newHeight
+end
+
+function newobject:GetHeight()
+	return self.height
+end
+
 --[[---------------------------------------------------------
 	- func: SetHeight()
 	- desc: sets the object's height
@@ -594,6 +602,8 @@ function newobject:SetSize(width, height, relative)
 	else
 		self:SetMaxWidth(width)
 	end
+
+	self:SetHeight(height)
 	
 	return self
 	

@@ -42,6 +42,26 @@ function newobject:initialize()
 	self:SetDrawFunc()
 end
 
+function newobject:setTabsFont(font)
+	for internalObjectIndex, internalObject in next, self.internals, nil do
+		self.internals[internalObjectIndex]:SetFont(font)
+	end
+end
+
+function newobject:setProperTabsFontSize(fontFileName)
+	for internalObjectIndex, internalObject in next, self.internals, nil do
+		if self.internals[internalObjectIndex].text then
+			self.internals[internalObjectIndex]:SetProperFontSize(fontFileName)
+		end
+	end
+end
+
+function newobject:setTabsWidth(newWidth)
+	for internalObjectIndex, internalObject in next, self.internals, nil do
+		self.internals[internalObjectIndex]:SetWidth(newWidth)
+	end
+end
+
 --[[---------------------------------------------------------
 	- func: update(deltatime)
 	- desc: updates the element
@@ -351,7 +371,7 @@ function newobject:AddScrollButtons()
 	local leftbutton = loveframes.objects["scrollbutton"]:new("left")
 	leftbutton.parent = self
 	leftbutton:SetPos(0, 0)
-	leftbutton:SetSize(15, 25)
+	leftbutton:SetSize(15, self.tabButtonsHeight)
 	leftbutton:SetAlwaysUpdate(true)
 	leftbutton.Update = function(object, dt)
 		object.staticx = 0
@@ -382,7 +402,7 @@ function newobject:AddScrollButtons()
 	local rightbutton = loveframes.objects["scrollbutton"]:new("right")
 	rightbutton.parent = self
 	rightbutton:SetPos(self.width - 15, 0)
-	rightbutton:SetSize(15, 25)
+	rightbutton:SetSize(15, self.tabButtonsHeight)
 	rightbutton:SetAlwaysUpdate(true)
 	rightbutton.Update = function(object, dt)
 		object.staticx = self.width - object.width

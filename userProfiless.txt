@@ -3,42 +3,11 @@ local multiRefObjects = {
 
 } -- multiRefObjects
 local obj1 = {
-	["4"] = {
+	["sample user"] = {
 		["modes"] = {
-			["the biggest"] = {
-				["textLineLength"] = 20;
-				["enterAtTheEndOfTheLine"] = false;
-				["fontSize"] = 150;
-			};
-			["Sample Mode"] = {
-				["textLineLength"] = 15;
-				["enterAtTheEndOfTheLine"] = false;
-				["fontSize"] = 10;
-			};
-			["bigger one"] = {
-				["textLineLength"] = 15;
-				["enterAtTheEndOfTheLine"] = false;
-				["fontSize"] = 50;
+			["sample mode"] = {
 			};
 		};
-	};
-	["1"] = {
-	};
-	["Sample"] = {
-	};
-	["dick"] = {
-	};
-	["FUUUUUUUUUUUUUCK"] = {
-	};
-	["3"] = {
-	};
-	["Sample User"] = {
-	};
-	["2"] = {
-	};
-	["lalala"] = {
-	};
-	["fhj;sdahbuasp"] = {
 	};
 }
 return obj1

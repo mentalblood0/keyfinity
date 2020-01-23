@@ -8,10 +8,10 @@ function chooseUserProfileScreen:updateElementsPositionAndSize()
 
     currentElements.addUserButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addUserButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
-    currentElements.addUserButton:SetProperFontSize("font.ttf")
+    currentElements.addUserButton:SetProperFontSize(chooseUserProfileScreen.defaultFontFileName)
 
     currentElements.chooseUserList:SetChildrenHeight(windowHeight / 10)
-    currentElements.chooseUserList:SetEqualChildrenFontSize("font.ttf")
+    currentElements.chooseUserList:SetEqualChildrenFontSize(chooseUserProfileScreen.defaultFontFileName)
 end
 
 function chooseUserProfileScreen:enter()
@@ -21,12 +21,12 @@ function chooseUserProfileScreen:enter()
     currentElements.addUserButton:SetText("Add user")
     currentElements.addUserButton.OnClick = function(this) switchToState("createUserScreen") end
 
-    loadSavedUserProfiles()
-    for userName,userProfile in next, userProfiles, nil do
+    print(userProfiles)
+    for userName, userProfile in next, userProfiles, nil do
         local newButton = gui.Create("button")
         newButton:SetHeight(100)
         newButton:SetText(userName)
-        newButton.OnClick = function(this) currentUserProfileName = this.label; switchToState("selectModeScreen") end
+        newButton.OnClick = function(this) currentUserProfileName = this.text; switchToState("selectModeScreen") end
 
         currentElements.chooseUserList:AddItem(newButton)
     end

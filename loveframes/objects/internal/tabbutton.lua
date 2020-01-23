@@ -56,6 +56,7 @@ function newobject:initialize(parent, text, tabnumber, tip, image, onopened, onc
 	self:SetDrawFunc()
 end
 
+
 --[[---------------------------------------------------------
 	- func: update(deltatime)
 	- desc: updates the object

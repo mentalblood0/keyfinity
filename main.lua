@@ -72,11 +72,15 @@ end
 userProfiles = {}
 userProfilesFileName = "userProfiless.txt"
 currentUserProfileName = nil
+currentModeName = nil
 
 function loadSavedUserProfiles()
     local info = love.filesystem.getInfo(userProfilesFileName)
     if info ~= nil then
         userProfiles = IPL.load(userProfilesFileName)
+        if not userProfiles then
+            userProfiles = {}
+        end
     else
         if userProfiles ~= {} then
             IPL.store(userProfilesFileName, userProfiles)

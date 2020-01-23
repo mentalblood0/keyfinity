@@ -747,7 +747,6 @@ function skin.tabbutton(object)
 	local parent = object:GetParent()
 	local ptabnumber = parent:GetTabNumber()
 	local font = object.font
-	local twidth = font:getWidth(object.text)
 	local theight = font:getHeight(object.text)
 	local imagewidth = 0
 	local imageheight = 0
@@ -758,7 +757,7 @@ function skin.tabbutton(object)
 		--image:setFilter("nearest", "nearest")
 		imagewidth = image:getWidth()
 		imageheight = image:getHeight()
-		object.width = imagewidth + 15 + twidth
+		object.width = imagewidth + 15 + object.width
 		if imageheight > theight then
 			parent:SetTabHeight(imageheight + 10)
 			object.height = imageheight + 10
@@ -766,7 +765,6 @@ function skin.tabbutton(object)
 			object.height = parent.tabheight
 		end
 	else
-		object.width = 10 + twidth
 		object.height = parent.tabheight
 	end
 	

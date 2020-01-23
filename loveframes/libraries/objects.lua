@@ -141,7 +141,9 @@ function loveframes.NewObject(id, name, inherit_from_base)
 
 	object.SetProperFontSize = function(this, fontFileName)
 		this.fontFileName = fontFileName
-		this.font = love.graphics.newFont(fontFileName, this:getProperFontSize(fontFileName))
+		this.fontSize = this:getProperFontSize(fontFileName)
+		this.font = love.graphics.newFont(fontFileName, this.fontSize)
+		this:SetFont(this.font)
 	end
 
 	if name == "loveframes_object_list" then

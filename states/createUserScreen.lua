@@ -20,7 +20,7 @@ function createUserScreen:updateElementsPositionAndSize()
     currentElements.newUserList:SetSpacing(windowHeight / 64)
 
     currentElements.newUserList:SetChildrenHeight(windowHeight / 10)
-    currentElements.newUserList:SetEqualChildrenFontSize("font.ttf")
+    currentElements.newUserList:SetEqualChildrenFontSize(createUserScreen.defaultFontFileName)
 end
 
 function createUserScreen:enter()
