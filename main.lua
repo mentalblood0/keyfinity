@@ -138,6 +138,9 @@ end
 
 function love.textinput(text)
     gui.textinput(text)
+    if currentState.textinput then
+        currentState:textinput(text)
+    end
 end
 
 function love.wheelmoved(x, y)
