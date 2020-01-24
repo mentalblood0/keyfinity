@@ -1,11 +1,22 @@
 local createModeScreen = {defaultFontFileName = "font.ttf"}
 
+local modeParameters = require "modeParameters"
+
 function createModeScreen:addButtonClick()
+    local convertedSuccessfully = modeParameters:convert()
+    if not convertedSuccessfully then
+        return
+    end
+
     local newModeName = currentElements.nameInput:GetText()
     if userProfiles[currentUserProfileName].modes == nil then
         userProfiles[currentUserProfileName].modes = {}
     end
     userProfiles[currentUserProfileName].modes[newModeName] = {}
+
+    for parameterName, parameterValue in pairs(modeParameters.converted) do
+        userProfiles[currentUserProfileName].modes[modeName][parameterName] = parameterValue
+    end
 
     IPL.store(userProfilesFileName, userProfiles)
 
@@ -21,10 +32,13 @@ function createModeScreen:updateElementsPositionAndSize()
 
     currentElements.basicParametersListTab:SetPadding(windowWidth / 64)
     currentElements.basicParametersListTab:SetSpacing(windowHeight / 64)
-
     currentElements.basicParametersListTab:SetChildrenHeight(windowHeight / 10)
     currentElements.basicParametersListTab:SetEqualChildrenFontSize(createModeScreen.defaultFontFileName)
 
+    currentElements.fontParametersListTab:SetPadding(windowWidth / 64)
+    currentElements.fontParametersListTab:SetSpacing(windowHeight / 64)
+    currentElements.fontParametersListTab:SetChildrenHeight(windowHeight / 10)
+    currentElements.fontParametersListTab:SetEqualChildrenFontSize(createModeScreen.defaultFontFileName)
 
     currentElements.addButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addButton:SetSize(windowWidth / 32 * 14, windowHeight / 32 * 4)
@@ -49,6 +63,11 @@ function createModeScreen:enter()
 
     currentElements.nameInput = gui.Create("textinput")
     currentElements.basicParametersListTab:AddItem(currentElements.nameInput)
+
+    currentElements.fontParametersListTab = gui.Create("list")
+    currentElements.newModeParameters:AddTab("Font", currentElements.fontParametersListTab, "Font parameters")
+
+    modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Maximum text height", "maxTextHeight", 10, 1000, 1, 100)
     
     currentElements.addButton = gui.Create("button")
     currentElements.addButton:SetText("Create")
