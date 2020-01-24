@@ -15,7 +15,7 @@ function createModeScreen:addButtonClick()
     userProfiles[currentUserProfileName].modes[newModeName] = {}
 
     for parameterName, parameterValue in pairs(modeParameters.converted) do
-        userProfiles[currentUserProfileName].modes[modeName][parameterName] = parameterValue
+        userProfiles[currentUserProfileName].modes[newModeName][parameterName] = parameterValue
     end
 
     IPL.store(userProfilesFileName, userProfiles)

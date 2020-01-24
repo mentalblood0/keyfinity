@@ -21,7 +21,6 @@ function chooseUserProfileScreen:enter()
     currentElements.addUserButton:SetText("Add user")
     currentElements.addUserButton.OnClick = function(this) switchToState("createUserScreen") end
 
-    print(userProfiles)
     for userName, userProfile in next, userProfiles, nil do
         local newButton = gui.Create("button")
         newButton:SetHeight(100)

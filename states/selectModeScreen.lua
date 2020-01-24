@@ -21,7 +21,6 @@ function selectModeScreen:enter()
     currentElements.createModeButton:SetText("Create mode")
     currentElements.createModeButton.OnClick = function(this) switchToState("createModeScreen") end
 
-    print(userProfiles, currentUserProfileName)
     if not userProfiles[currentUserProfileName].modes then
         userProfiles[currentUserProfileName].modes = {}
     end

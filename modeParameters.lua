@@ -15,19 +15,20 @@ function modeParameters:addIntegerNumberbox(parentElement, name, internalName, m
     numberbox:SetValue(defaultValue)
     numberbox:SetMinMax(minValue, maxValue)
     
-    modeParameters[internalName] = {}
-    modeParameters[internalName].element = numberbox
-    modeParameters[internalName].valueType = "integer"
+    modeParameters.raw[internalName] = {}
+    modeParameters.raw[internalName].element = numberbox
+    modeParameters.raw[internalName].valueType = "integer"
 
     currentElements[internalName .. "Numberbox"] = numberbox
 end
 
 function modeParameters:convert()
     modeParameters.converted = {}
-    for parameterInternalName, parameter in pairs(modeParameters) do
+    for parameterInternalName, parameter in pairs(modeParameters.raw) do
         if parameter.valueType == "integer" then
-            modeParameters.converted[parameterInternalName] = tonumber(parameter.element:GetText())
+            modeParameters.converted[parameterInternalName] = tonumber(parameter.element:GetValue())
             if modeParameters.converted[parameterInternalName] == nil then
+                print("FUCKED")
                 return false
             end
         elseif parameter.valueType == "string" then

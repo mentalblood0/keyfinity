@@ -3,9 +3,13 @@ local multiRefObjects = {
 
 } -- multiRefObjects
 local obj1 = {
-	["sample user"] = {
+	["username"] = {
 		["modes"] = {
-			["sample mode"] = {
+			["large"] = {
+				["maxTextHeight"] = 400;
+			};
+			["modename"] = {
+				["maxTextHeight"] = 100;
 			};
 		};
 	};
