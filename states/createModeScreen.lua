@@ -30,15 +30,7 @@ function createModeScreen:updateElementsPositionAndSize()
     currentElements.newModeParameters:setTabsWidth(windowWidth / 8)
     currentElements.newModeParameters:setProperTabsFontSize(createModeScreen.defaultFontFileName)
 
-    currentElements.basicParametersListTab:SetPadding(windowWidth / 64)
-    currentElements.basicParametersListTab:SetSpacing(windowHeight / 64)
-    currentElements.basicParametersListTab:SetChildrenHeight(windowHeight / 10)
-    currentElements.basicParametersListTab:SetEqualChildrenFontSize(createModeScreen.defaultFontFileName)
-
-    currentElements.fontParametersListTab:SetPadding(windowWidth / 64)
-    currentElements.fontParametersListTab:SetSpacing(windowHeight / 64)
-    currentElements.fontParametersListTab:SetChildrenHeight(windowHeight / 10)
-    currentElements.fontParametersListTab:SetEqualChildrenFontSize(createModeScreen.defaultFontFileName)
+    currentElements.newModeParameters:setChildrenPaddingSpacingEtc(windowWidth / 64, windowHeight / 64, windowHeight / 10, createModeScreen.defaultFontFileName)
 
     currentElements.addButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addButton:SetSize(windowWidth / 32 * 14, windowHeight / 32 * 4)
@@ -66,8 +58,11 @@ function createModeScreen:enter()
 
     currentElements.fontParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Font", currentElements.fontParametersListTab, "Font parameters")
-
     modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Maximum text height", "maxTextHeight", 10, 1000, 1, 100)
+
+    currentElements.textParametersListTab = gui.Create("list")
+    currentElements.newModeParameters:AddTab("Text", currentElements.textParametersListTab, "Text parameters")
+    modeParameters:addIntegerNumberbox(currentElements.textParametersListTab, "Text line length", "textLineLength", 1, 1024, 15)
     
     currentElements.addButton = gui.Create("button")
     currentElements.addButton:SetText("Create")

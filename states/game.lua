@@ -1,5 +1,6 @@
 local game = {defaultFontFileName = "font.ttf"}
 
+local currentSymbols = nil
 local currentSymbolIndex = nil
 local textToTypeLength = nil
 
@@ -8,8 +9,10 @@ function getParameter(parameterName)
 end
 
 function generateNewText()
-    textToTypeLength = 16
-    currentElements.textToType:SetText(textGenerator:randomSymbols(textToTypeLength))
+    textToTypeLength = getParameter("textLineLength")
+    local newText = textGenerator:randomSymbols(textToTypeLength)
+    currentElements.textToType:SetText(newText.text)
+    currentSymbols = newText.array
     currentSymbolIndex = 1
 end
 
@@ -44,7 +47,8 @@ function game:enter()
 end
 
 function game:textinput(text)
-    if text == getCharByIndex(currentElements.textToType:GetText(), currentSymbolIndex) then
+    local correctSymbol = currentSymbols[currentSymbolIndex]
+    if text == correctSymbol then
         currentSymbolIndex = currentSymbolIndex + 1
         if currentSymbolIndex > textToTypeLength then
             generateNewText()

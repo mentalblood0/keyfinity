@@ -10,13 +10,14 @@ function textGenerator:randomSymbols(numberOfSymbols)
     local possibleSymbols = englishLetters
     local numberOfPossibleSymbols = #possibleSymbols
 
-    local text = ""
+    local result = {text = "", array = {}}
     for symbolNumber = 1, numberOfSymbols do
         local newSymbol = getCharByIndex(possibleSymbols, math.random(numberOfPossibleSymbols))
-        text = text .. newSymbol
+        result.text = result.text .. newSymbol
+        result.array[symbolNumber] = newSymbol
     end
 
-    return text
+    return result
 end
 
 return textGenerator
