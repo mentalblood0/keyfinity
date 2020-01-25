@@ -210,7 +210,9 @@ end
 --]]---------------------------------------------------------
 function newobject:MoveToX(x)
 
+	print(self.staticx, x)
 	self.staticx = x
+	print("SET", self.staticx)
 	
 end
 

@@ -160,6 +160,9 @@ function loveframes.NewObject(id, name, inherit_from_base)
 			local minParentSideSize = math.min(this:GetParent():GetWidth(), this:GetParent():GetHeight())
 			this:SetButtonSize(this.RelativeButtonSize * minParentSideSize, this.RelativeButtonSize * minParentSideSize)
 		end
+		if this:GetType() == "slider" then
+			this:SetValue(this:GetValue())
+		end
 	end
 
 	object.setProperChildrenFontSize = function(this, fontFileName)

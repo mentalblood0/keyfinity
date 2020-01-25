@@ -60,7 +60,7 @@ function createModeScreen:enter()
     currentElements.fontParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Font", currentElements.fontParametersListTab, "Font parameters")
     modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Maximum text height", "maxTextHeight", 10, 1000, 1, 100)
-    modeParameters:addColorChanger(currentElements.fontParametersListTab, "Default text color", "defaultTextColor", {0, 0, 0, 1})
+    modeParameters:addColorChanger(currentElements.fontParametersListTab, "Default text color", "defaultTextColor", {0.5, 0.5, 0.5, 1})
 
     currentElements.textParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Text", currentElements.textParametersListTab, "Text parameters")

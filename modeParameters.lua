@@ -29,7 +29,13 @@ end
 function modeParameters:addColorChanger(parentElement, name, internalName, defaultColor)
     modeParameters:addText(parentElement, name)
     local colorChanger = complexGui:Create("colorChanger")
+    colorChanger:setColor(defaultColor)
     parentElement:AddItem(colorChanger)
+
+    modeParameters.raw[internalName] = {}
+    modeParameters.raw[internalName].element = colorChanger
+    modeParameters.raw[internalName].valueType = "color"
+
     currentElements[internalName .. "colorChanger"] = colorChanger
 end
 
@@ -43,7 +49,10 @@ function modeParameters:convert()
             end
         elseif parameter.valueType == "string" then
             modeParameters.converted[parameterInternalName] = parameter.element:GetText()
+        elseif parameter.valueType == "color" then
+            modeParameters.converted[parameterInternalName] = parameter.element:getColor()
         end
+
     end
     return true
 end

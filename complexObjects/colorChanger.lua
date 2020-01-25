@@ -1,6 +1,6 @@
 local colorChanger = {}
 
-function colorChanger:Create(tableWhereToAddElements, parent, width, height)
+function colorChanger:Create()
 	local panel = gui.Create("panel")
 	panel.color = {0, 0, 0, 1}
 	
@@ -85,6 +85,18 @@ function colorChanger:Create(tableWhereToAddElements, parent, width, height)
 	slider3Value.Update = function(object)
 		local text = {{color = {0, 0, 1}}, "Blue: " .. slider3:GetValue()}
 		object:SetText(text)
+	end
+
+	panel.getColor = function(this)
+		return this.color
+	end
+
+	panel.setColor = function(this, newColor)
+		this.color = newColor
+		children = this:GetChildren()
+		children[2]:SetValue(255 * newColor[1])
+		children[4]:SetValue(255 * newColor[2])
+		children[6]:SetValue(255 * newColor[3])
 	end
 
     return panel
