@@ -8,7 +8,7 @@ function selectModeScreen:updateElementsPositionAndSize()
 
     currentElements.createModeButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.createModeButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
-    currentElements.createModeButton:SetProperFontSize(selectModeScreen.defaultFontFileName)
+    currentElements.createModeButton:setProperFontSize(selectModeScreen.defaultFontFileName)
 
     currentElements.selectModeList:SetChildrenHeight(windowHeight / 10)
     currentElements.selectModeList:SetEqualChildrenFontSize(selectModeScreen.defaultFontFileName)

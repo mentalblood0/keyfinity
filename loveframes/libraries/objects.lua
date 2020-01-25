@@ -139,7 +139,10 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		return fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this.text)
 	end
 
-	object.SetProperFontSize = function(this, fontFileName)
+	object.setProperFontSize = function(this, fontFileName)
+		if not this.text then
+			return
+		end
 		this.fontFileName = fontFileName
 		this.fontSize = this:getProperFontSize(fontFileName)
 		this.font = love.graphics.newFont(fontFileName, this.fontSize)
@@ -147,11 +150,8 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	object.updatePositionAndSizeRelativeToParent = function(this)
-		if this.RelativeWidth then
-			this:SetWidth(this.RelativeWidth * this:GetParent():GetWidth())
-		end
-		if this.RelativeHeight then
-			this:SetHeight(this.RelativeHeight * this:GetParent():GetHeight())
+		if this.RelativeWidth and this.RelativeHeight then
+			this:SetSize(this.RelativeWidth * this:GetParent():GetWidth(), this.RelativeHeight * this:GetParent():GetHeight())
 		end
 		if this.RelativeX and this.RelativeY then
 			this:SetPos(this.RelativeX * this:GetParent():GetWidth(), this.RelativeY * this:GetParent():GetHeight())
@@ -159,6 +159,21 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		if this.RelativeButtonSize then
 			local minParentSideSize = math.min(this:GetParent():GetWidth(), this:GetParent():GetHeight())
 			this:SetButtonSize(this.RelativeButtonSize * minParentSideSize, this.RelativeButtonSize * minParentSideSize)
+		end
+	end
+
+	object.setProperChildrenFontSize = function(this, fontFileName)
+		local children = this:GetChildren()
+		for key, child in pairs(children) do
+			child:setProperFontSize(fontFileName)
+		end
+	end
+
+	object.setProperSelfAndChildrenFontSizeRecursively = function(this, fontFileName)
+		this:setProperFontSize(fontFileName)
+		local children = this:GetChildren()
+		for key, child in pairs(children) do
+			child:setProperFontSize(fontFileName)
 		end
 	end
 
@@ -193,7 +208,7 @@ function loveframes.NewObject(id, name, inherit_from_base)
 			if not this.fontFileName then
 				this.fontFileName = currentState.defaultFontFileName
 			end
-			this:SetProperFontSize(this.fontFileName)
+			this:setProperFontSize(this.fontFileName)
 		end
 	elseif name == "loveframes_object_tabs" then
 		object.setChildrenSize = function(this, newWidth, newHeight)

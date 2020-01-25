@@ -30,10 +30,10 @@ end
 function game:updateElementsPositionAndSize()
     currentElements.exitButton:SetPos(0, 0)
     currentElements.exitButton:SetSize(windowWidth / 64, windowWidth / 64)
-    currentElements.exitButton:SetProperFontSize(game.defaultFontFileName)
+    currentElements.exitButton:setProperFontSize(game.defaultFontFileName)
 
     currentElements.textToType:SetSize(windowWidth * 2, getParameter("maxTextHeight"))
-    currentElements.textToType:SetProperFontSize(game.defaultFontFileName)
+    currentElements.textToType:setProperFontSize(game.defaultFontFileName)
     game:refreshTextAlignment()
 end
 

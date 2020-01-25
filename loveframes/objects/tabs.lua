@@ -60,7 +60,7 @@ end
 function newobject:setProperTabsFontSize(fontFileName)
 	for internalObjectIndex, internalObject in next, self.internals, nil do
 		if self.internals[internalObjectIndex].text then
-			self.internals[internalObjectIndex]:SetProperFontSize(fontFileName)
+			self.internals[internalObjectIndex]:setProperFontSize(fontFileName)
 		end
 	end
 end

@@ -39,7 +39,6 @@ function modeParameters:convert()
         if parameter.valueType == "integer" then
             modeParameters.converted[parameterInternalName] = tonumber(parameter.element:GetValue())
             if modeParameters.converted[parameterInternalName] == nil then
-                print("FUCKED")
                 return false
             end
         elseif parameter.valueType == "string" then

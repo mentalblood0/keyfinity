@@ -35,11 +35,11 @@ function createModeScreen:updateElementsPositionAndSize()
 
     currentElements.addButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addButton:SetSize(windowWidth / 32 * 14, windowHeight / 32 * 4)
-    currentElements.addButton:SetProperFontSize(createModeScreen.defaultFontFileName)
+    currentElements.addButton:setProperFontSize(createModeScreen.defaultFontFileName)
 
     currentElements.cancelButton:SetPos(windowWidth / 32 * 17, windowHeight / 32 * 26)
     currentElements.cancelButton:SetSize(windowWidth / 32 * 14, windowHeight / 32 * 4)
-    currentElements.cancelButton:SetProperFontSize(createModeScreen.defaultFontFileName)
+    currentElements.cancelButton:setProperFontSize(createModeScreen.defaultFontFileName)
 end
 
 function createModeScreen:enter()

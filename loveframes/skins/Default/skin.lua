@@ -612,7 +612,7 @@ function skin.sliderbutton(object)
 	local parent = object:GetParent()
 	local enabled = parent:GetEnabled()
 	
-	if not enabled then
+	--if not enabled then
 		-- button body
 		love.graphics.setColor(skin.controls.color_back1)
 		love.graphics.rectangle("fill", x, y, width, height)
@@ -620,25 +620,7 @@ function skin.sliderbutton(object)
 		love.graphics.setColor(skin.controls.color_back2)
 		skin.OutlinedRectangle(x, y, width, height)
 		return
-	end
-	
-	
-	local image = skin.images["slider.png"]
-	local imagewidth = image:getWidth()
-	local imageheight = image:getHeight()
-	--image:setFilter("nearest", "nearest")
-	
-	local fore
-	if down then
-		fore  = skin.controls.color_fore0
-	elseif hover then
-		fore  = skin.controls.color_active
-	else
-		fore  = skin.controls.color_back3
-	end
-	
-	love.graphics.setColor(fore)
-	love.graphics.draw(image, x + (width - imagewidth) / 2, y + (height - imageheight) / 2)
+	--end
 end
 
 --[[---------------------------------------------------------

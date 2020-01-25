@@ -19,6 +19,7 @@ function complexGui:Create(objectName)
     object.updateChildrenPositionAndSize = function(this)
         for key, child in pairs(this:GetChildren()) do
             child:updatePositionAndSizeRelativeToParent()
+            child:setProperFontSize(currentState.defaultFontFileName)
         end
     end
 

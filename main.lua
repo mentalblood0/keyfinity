@@ -58,11 +58,20 @@ function searchAndAddStates()
     end
 end
 
+function updateComplexElementsChildrenPositionAndSize()
+    for key, element in pairs(currentElements) do
+        if element.complex then
+            element:updateChildrenPositionAndSize()
+        end
+    end
+end
+
 function switchToState(stateName)
     clearCurrentElements()
     currentState = states[stateName]
     currentState:enter()
     currentState:updateElementsPositionAndSize()
+    updateComplexElementsChildrenPositionAndSize()
     love.graphics.setBackgroundColor({0.1, 0.4, 0.3, 1})
 end
 
@@ -117,11 +126,7 @@ love.resize = function(newWidth, newHeight)
     windowWidth = newWidth
     windowHeight = newHeight
     currentState:updateElementsPositionAndSize()
-    for key, element in pairs(currentElements) do
-        if element.complex then
-            element:updateChildrenPositionAndSize()
-        end
-    end
+    updateComplexElementsChildrenPositionAndSize()
 end
 
 love.mousepressed = function(x, y, button)

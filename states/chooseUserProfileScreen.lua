@@ -8,10 +8,10 @@ function chooseUserProfileScreen:updateElementsPositionAndSize()
 
     currentElements.addUserButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addUserButton:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 4)
-    currentElements.addUserButton:SetProperFontSize(chooseUserProfileScreen.defaultFontFileName)
+    currentElements.addUserButton:setProperFontSize(chooseUserProfileScreen.defaultFontFileName)
 
     currentElements.chooseUserList:SetChildrenHeight(windowHeight / 10)
-    currentElements.chooseUserList:SetEqualChildrenFontSize(chooseUserProfileScreen.defaultFontFileName)
+    currentElements.chooseUserList:SetEqualChildrenFontSize(currentState.defaultFontFileName)
 end
 
 function chooseUserProfileScreen:enter()
