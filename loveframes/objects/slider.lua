@@ -371,6 +371,8 @@ function newobject:SetButtonSize(width, height)
 	local sliderbutton = internals[1]
 	
 	if sliderbutton then
+		sliderbutton:SetWidth(width)
+		sliderbutton:SetHeight(height)
 		sliderbutton.width = width
 		sliderbutton.height = height
 	end

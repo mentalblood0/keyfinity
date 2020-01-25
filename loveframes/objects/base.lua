@@ -490,6 +490,7 @@ end
 	- func: SetSize(width, height, r1, r2)
 	- desc: sets the object's size
 --]]---------------------------------------------------------
+
 function newobject:SetSize(width, height, r1, r2)
 
 	if r1 then

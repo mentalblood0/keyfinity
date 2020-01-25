@@ -3,10 +3,14 @@ local modeParameters = {}
 modeParameters.raw = {}
 modeParameters.converted = {}
 
+function modeParameters:addText(parentElement, text)
+    local textElement = gui.Create("text")
+    textElement:SetText(text)
+    parentElement:AddItem(textElement)
+end
+
 function modeParameters:addIntegerNumberbox(parentElement, name, internalName, minValue, maxValue, step, defaultValue)
-    local nameText = gui.Create("text")
-    nameText:SetText(name)
-    parentElement:AddItem(nameText)
+    modeParameters:addText(parentElement, name)
 
     local numberbox = gui.Create("numberbox")
     parentElement:AddItem(numberbox)
@@ -20,6 +24,13 @@ function modeParameters:addIntegerNumberbox(parentElement, name, internalName, m
     modeParameters.raw[internalName].valueType = "integer"
 
     currentElements[internalName .. "Numberbox"] = numberbox
+end
+
+function modeParameters:addColorChanger(parentElement, name, internalName, defaultColor)
+    modeParameters:addText(parentElement, name)
+    local colorChanger = complexGui:Create("colorChanger")
+    parentElement:AddItem(colorChanger)
+    currentElements[internalName .. "colorChanger"] = colorChanger
 end
 
 function modeParameters:convert()

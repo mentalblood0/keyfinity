@@ -11,7 +11,7 @@ function fonting:fontSizeToFitIntoRect(fontFileName, rectWidth, rectHeight, text
 		fontSize = fontSize - 1
 		font = love.graphics.newFont(fontFileName, fontSize)
     end
-    while font:getWidth(text) > rectWidth do
+    while font:getWidth(text) * 1.2 > rectWidth do
 		fontSize = fontSize - 1
 		font = love.graphics.newFont(fontFileName, fontSize)
 	end

@@ -146,6 +146,22 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		this:SetFont(this.font)
 	end
 
+	object.updatePositionAndSizeRelativeToParent = function(this)
+		if this.RelativeWidth then
+			this:SetWidth(this.RelativeWidth * this:GetParent():GetWidth())
+		end
+		if this.RelativeHeight then
+			this:SetHeight(this.RelativeHeight * this:GetParent():GetHeight())
+		end
+		if this.RelativeX and this.RelativeY then
+			this:SetPos(this.RelativeX * this:GetParent():GetWidth(), this.RelativeY * this:GetParent():GetHeight())
+		end
+		if this.RelativeButtonSize then
+			local minParentSideSize = math.min(this:GetParent():GetWidth(), this:GetParent():GetHeight())
+			this:SetButtonSize(this.RelativeButtonSize * minParentSideSize, this.RelativeButtonSize * minParentSideSize)
+		end
+	end
+
 	if name == "loveframes_object_list" then
 
 		object.SetEqualChildrenFontSize = function(this, fontFileName)
@@ -178,6 +194,12 @@ function loveframes.NewObject(id, name, inherit_from_base)
 				this.fontFileName = currentState.defaultFontFileName
 			end
 			this:SetProperFontSize(this.fontFileName)
+		end
+	elseif name == "loveframes_object_tabs" then
+		object.setChildrenSize = function(this, newWidth, newHeight)
+			for key, child in pairs(this:GetChildren()) do
+				child:SetSize(newWidth, newHeight)
+			end
 		end
 	end
 	

@@ -6,6 +6,7 @@ os = require "os"
 fonting = require "fonting"
 
 gui = require "loveframes"
+complexGui = require "complexGui"
 
 TLfres = require "dependencies/tlfres"
 IPL = require "dependencies/IPL"
@@ -49,7 +50,7 @@ function addState(name)
 end
 
 function searchAndAddStates()
-    local files = love.filesystem.getDirectoryItems("states")
+    local files = love.filesystem.getDirectoryItems(statesDirectory)
 
     for fileNumber, fileName in ipairs(files) do
         local fileNameWithoutExtension = string.gsub(fileName, ".lua", "")
@@ -96,6 +97,7 @@ love.load = function()
     math.randomseed(os.time())
 
     searchAndAddStates()
+    complexGui:searchAndAddObjects()
     loadSavedUserProfiles()
     love.window.setMode(windowWidth, windowHeight, {fullscreen = false, resizable = true})
     switchToState("chooseUserProfileScreen")
@@ -115,6 +117,11 @@ love.resize = function(newWidth, newHeight)
     windowWidth = newWidth
     windowHeight = newHeight
     currentState:updateElementsPositionAndSize()
+    for key, element in pairs(currentElements) do
+        if element.complex then
+            element:updateChildrenPositionAndSize()
+        end
+    end
 end
 
 love.mousepressed = function(x, y, button)

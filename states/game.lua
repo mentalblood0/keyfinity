@@ -23,7 +23,7 @@ function alignTextSymbolToCenter(element, symbolNumber, x, y)
     element:SetPos(x - textLengthInPixels, y - textHeightInPixels / 2)
 end
 
-function refreshTextAlignment()
+function game:refreshTextAlignment()
     alignTextSymbolToCenter(currentElements.textToType, currentSymbolIndex, windowWidth / 2, windowHeight / 2)
 end
 
@@ -34,7 +34,7 @@ function game:updateElementsPositionAndSize()
 
     currentElements.textToType:SetSize(windowWidth * 2, getParameter("maxTextHeight"))
     currentElements.textToType:SetProperFontSize(game.defaultFontFileName)
-    refreshTextAlignment()
+    game:refreshTextAlignment()
 end
 
 function game:enter()
@@ -53,7 +53,7 @@ function game:textinput(text)
         if currentSymbolIndex > textToTypeLength then
             generateNewText()
         end
-        refreshTextAlignment()
+        game:refreshTextAlignment()
     end
 end
 
