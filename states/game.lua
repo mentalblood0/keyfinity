@@ -10,8 +10,9 @@ end
 
 function generateNewText()
     textToTypeLength = getParameter("textLineLength")
+    print(getParameter("defaultTextColor"))
     local newText = textGenerator:randomSymbols(textToTypeLength)
-    currentElements.textToType:SetText(newText.text)
+    currentElements.textToType:SetText({{color = getParameter("defaultTextColor")}, newText.text})
     currentSymbols = newText.array
     currentSymbolIndex = 1
 end

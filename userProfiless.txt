@@ -5,9 +5,15 @@ local multiRefObjects = {
 local obj1 = {
 	["username"] = {
 		["modes"] = {
-			["one"] = {
-				["textLineLength"] = 1;
-				["maxTextHeight"] = 100;
+			["modename"] = {
+				["maxTextHeight"] = 200;
+				["textLineLength"] = 16;
+				["defaultTextColor"] = {
+					[1] = 1;
+					[2] = 0.58039215686275;
+					[3] = 0.35686274509804;
+					[4] = 1;
+				};
 			};
 		};
 	};
