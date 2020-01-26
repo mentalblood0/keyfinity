@@ -9,6 +9,12 @@ function modeParameters:addText(parentElement, text)
     parentElement:AddItem(textElement)
 end
 
+function modeParameters:registerModeParameter(internalName, element, valueType)
+    modeParameters.raw[internalName] = {}
+    modeParameters.raw[internalName].element = element
+    modeParameters.raw[internalName].valueType = valueType
+end
+
 function modeParameters:addIntegerNumberbox(parentElement, name, internalName, minValue, maxValue, step, defaultValue)
     modeParameters:addText(parentElement, name)
 
@@ -18,25 +24,36 @@ function modeParameters:addIntegerNumberbox(parentElement, name, internalName, m
     numberbox:SetDecreaseAmount(step)
     numberbox:SetValue(defaultValue)
     numberbox:SetMinMax(minValue, maxValue)
+    numberbox:setProperFontSize(currentState.defaultFontFileName)
     
-    modeParameters.raw[internalName] = {}
-    modeParameters.raw[internalName].element = numberbox
-    modeParameters.raw[internalName].valueType = "integer"
+    modeParameters:registerModeParameter(internalName, numberbox, "integer")
 
     currentElements[internalName .. "Numberbox"] = numberbox
 end
 
 function modeParameters:addColorChanger(parentElement, name, internalName, defaultColor)
     modeParameters:addText(parentElement, name)
+
     local colorChanger = complexGui:Create("colorChanger")
     colorChanger:setColor(defaultColor)
     parentElement:AddItem(colorChanger)
 
-    modeParameters.raw[internalName] = {}
-    modeParameters.raw[internalName].element = colorChanger
-    modeParameters.raw[internalName].valueType = "color"
+    modeParameters:registerModeParameter(internalName, colorChanger, "color")
 
-    currentElements[internalName .. "colorChanger"] = colorChanger
+    currentElements[internalName .. "ColorChanger"] = colorChanger
+end
+
+function modeParameters:addTextInput(parentElement, name, internalName, defaultValue)
+    modeParameters:addText(parentElement, name)
+
+    local textInput = gui.Create("textinput")
+    parentElement:AddItem(textInput)
+    textInput:setProperFontSize(currentState.defaultFontFileName)
+    textInput:SetText(defaultValue)
+
+    modeParameters:registerModeParameter(internalName, textInput, "string")
+
+    currentElements[internalName .. "TextInput"] = colorChanger
 end
 
 function modeParameters:convert()

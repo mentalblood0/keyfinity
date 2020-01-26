@@ -136,11 +136,11 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	object.getProperFontSize = function(this, fontFileName)
-		return fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this.text)
+		return fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this:GetText())
 	end
 
 	object.setProperFontSize = function(this, fontFileName)
-		if not this.text then
+		if (not this.text) and (not this.value) and (not (this:GetType() == "numberbox")) then
 			return
 		end
 		this.fontFileName = fontFileName
@@ -162,21 +162,6 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		end
 		if this:GetType() == "slider" then
 			this:SetValue(this:GetValue())
-		end
-	end
-
-	object.setProperChildrenFontSize = function(this, fontFileName)
-		local children = this:GetChildren()
-		for key, child in pairs(children) do
-			child:setProperFontSize(fontFileName)
-		end
-	end
-
-	object.setProperSelfAndChildrenFontSizeRecursively = function(this, fontFileName)
-		this:setProperFontSize(fontFileName)
-		local children = this:GetChildren()
-		for key, child in pairs(children) do
-			child:setProperFontSize(fontFileName)
 		end
 	end
 

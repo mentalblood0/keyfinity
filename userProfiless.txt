@@ -5,15 +5,26 @@ local multiRefObjects = {
 local obj1 = {
 	["username"] = {
 		["modes"] = {
+			["another font"] = {
+				["textLineLength"] = 10;
+				["maxTextHeight"] = 100;
+				["defaultTextColor"] = {
+					[1] = 1;
+					[2] = 0.34117647058824;
+					[3] = 0.65490196078431;
+					[4] = 1;
+				};
+				["defaultFontFileName"] = "folder/Allia.ttf";
+			};
 			["modename"] = {
 				["maxTextHeight"] = 200;
-				["textLineLength"] = 16;
 				["defaultTextColor"] = {
 					[1] = 1;
 					[2] = 0.58039215686275;
 					[3] = 0.35686274509804;
 					[4] = 1;
 				};
+				["textLineLength"] = 16;
 			};
 		};
 	};

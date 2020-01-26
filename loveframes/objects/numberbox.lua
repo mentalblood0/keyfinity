@@ -141,6 +141,14 @@ function newobject:initialize()
 	self:SetDrawFunc()
 end
 
+function newobject:GetText()
+	return self.internals[1]:GetText()
+end
+
+function newobject:SetFont(font)
+	self.internals[1]:SetFont(font)
+end
+
 --[[---------------------------------------------------------
 	- func: update(deltatime)
 	- desc: updates the element

@@ -10,7 +10,6 @@ end
 
 function generateNewText()
     textToTypeLength = getParameter("textLineLength")
-    print(getParameter("defaultTextColor"))
     local newText = textGenerator:randomSymbols(textToTypeLength)
     currentElements.textToType:SetText({{color = getParameter("defaultTextColor")}, newText.text})
     currentSymbols = newText.array
@@ -34,7 +33,7 @@ function game:updateElementsPositionAndSize()
     currentElements.exitButton:setProperFontSize(game.defaultFontFileName)
 
     currentElements.textToType:SetSize(windowWidth * 2, getParameter("maxTextHeight"))
-    currentElements.textToType:setProperFontSize(game.defaultFontFileName)
+    currentElements.textToType:setProperFontSize(getParameter("defaultFontFileName"))
     game:refreshTextAlignment()
 end
 
