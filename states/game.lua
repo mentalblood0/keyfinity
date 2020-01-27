@@ -3,15 +3,42 @@ local game = {defaultFontFileName = "font.ttf"}
 local currentSymbols = nil
 local currentSymbolIndex = nil
 local textToTypeLength = nil
+local fontParameters = nil
 
 function getParameter(parameterName)
     return userProfiles[currentUserProfileName].modes[currentModeName][parameterName]
 end
 
+function loadSymbolsParameters()
+    symbolsParameters = {
+        printed = {
+            other = {
+                font = getParameter("printedSymbolsDefaultFontFileName"),
+                color = getParameter("printedSymbolsDefaultColor"), 
+                scale = {x = getParameter("printedSymbolsDefaultScalePercents") / 100, y = getParameter("printedSymbolsDefaultScalePercents") / 100}
+            }
+        },
+        current = {
+            other = {
+                font = getParameter("currentSymbolDefaultFontFileName"),
+                color = getParameter("currentSymbolDefaultColor"), 
+                scale = {x = getParameter("currentSymbolDefaultScalePercents") / 100, y = getParameter("currentSymbolDefaultScalePercents") / 100}
+            }
+        },
+        unprinted = {
+            other = {
+                font = getParameter("unprintedSymbolsDefaultFontFileName"),
+                color = getParameter("unprintedSymbolsDefaultColor"), 
+                scale = {x = getParameter("unprintedSymbolsDefaultScalePercents") / 100, y = getParameter("unprintedSymbolsDefaultScalePercents") / 100}
+            }
+        }
+    }
+end
+
 function generateNewText()
     textToTypeLength = getParameter("textLineLength")
     local newText = textGenerator:randomSymbols(textToTypeLength)
-    currentElements.textToType:SetText({{color = getParameter("defaultTextColor")}, newText.text})
+    currentElements.textToType:setComplexText(newText.array, symbolsParameters)
     currentSymbols = newText.array
     currentSymbolIndex = 1
 end

@@ -7,6 +7,8 @@ function modeParameters:addText(parentElement, text)
     local textElement = gui.Create("text")
     textElement:SetText(text)
     parentElement:AddItem(textElement)
+
+    table.insert(currentElements, textElement)
 end
 
 function modeParameters:registerModeParameter(internalName, element, valueType)
@@ -53,7 +55,7 @@ function modeParameters:addTextInput(parentElement, name, internalName, defaultV
 
     modeParameters:registerModeParameter(internalName, textInput, "string")
 
-    currentElements[internalName .. "TextInput"] = colorChanger
+    currentElements[internalName .. "TextInput"] = textInput
 end
 
 function modeParameters:convert()

@@ -60,6 +60,52 @@ end
 	- func: draw()
 	- desc: draws the object
 --]]---------------------------------------------------------
+function getTheGrandestParentThatIsList(element)
+	local parent = element:GetParent()
+	local result = parent
+	while parent do
+		if parent:GetType() == "list" then
+			result = parent
+		end
+		parent = parent:GetParent() 
+	end
+	return result
+end
+
+function rectsIntersection(rect1, rect2)
+	intersection = {x = math.max(rect1.x, rect2.x), y = math.max(rect1.y, rect2.y)}
+	intersection.width = math.min(rect1.x + rect2.width, rect2.x + rect2.width) - intersection.x
+	intersection.height = math.min(rect1.y + rect2.height, rect2.y + rect2.height) - intersection.y
+	return intersection
+end
+
+local stencilParent = nil
+
+function startStencil(element)
+	local x = element.x
+	local y = element.y
+	local width = element.width
+	local height = element.height
+	stencilParent = getTheGrandestParentThatIsList(element)
+	local parentRect
+	if not stencilParent then
+		return
+	end
+	parentRect = {x = stencilParent:GetX(), y = stencilParent:GetY(), width = stencilParent:GetWidth(), height = stencilParent:GetHeight()}
+	local intersection = rectsIntersection({x = x, y = y, width = width, height = height}, parentRect)
+	local stencilfunc = function() love.graphics.rectangle("fill", intersection.x, intersection.y, intersection.width, intersection.height) end
+
+	love.graphics.stencil(stencilfunc)
+	love.graphics.setStencilTest("greater", 0)
+end
+
+function endStencil(element)
+	if not stencilParent then
+		return
+	end
+	love.graphics.setStencilTest()
+end
+
 function newobject:draw()
 	if loveframes.state ~= self.state then
 		return
@@ -79,7 +125,11 @@ function newobject:draw()
 	local children = self.children
 	if children then
 		for k, v in ipairs(children) do
-			v:draw()
+			if v:GetParent():GetType() ~= "list" then
+				startStencil(v)
+				v:draw()
+				endStencil()
+			end
 		end
 	end
 	

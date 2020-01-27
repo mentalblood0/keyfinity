@@ -124,7 +124,7 @@ function newobject:update(dt)
 	local hover = self.hover
 	
 	-- move to parent if there is a parent
-	if parent ~= base then
+	if parent ~= base and parent.type ~= "list" then
 		local parentx = parent.x
 		local parenty = parent.y
 		local staticx = self.staticx
@@ -265,6 +265,7 @@ end
 	- func: draw()
 	- desc: draws the object
 --]]---------------------------------------------------------
+
 function newobject:draw()
 	if loveframes.state ~= self.state then
 		return
@@ -278,26 +279,14 @@ function newobject:draw()
 	local y = self.y
 	local width = self.width
 	local height = self.height
-	local stencilfunc = function() love.graphics.rectangle("fill", x, y, width, height) end
-	local vbar = self.vbar
-	local hbar = self.hbar
 	
 	-- set the object's draw order
 	self:SetDrawOrder()
-	
-	if vbar and hbar then
-		stencilfunc = function() love.graphics.rectangle("fill", x, y, width - 16, height - 16) end
-	end
-	
-	love.graphics.stencil(stencilfunc)
-	love.graphics.setStencilTest("greater", 0)
 	
 	local drawfunc = self.Draw or self.drawfunc
 	if drawfunc then
 		drawfunc(self)
 	end
-	
-	love.graphics.setStencilTest()
 	
 	local internals = self.internals
 	if internals then

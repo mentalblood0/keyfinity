@@ -931,69 +931,27 @@ end
 	- desc: draws the text object
 --]]---------------------------------------------------------
 function skin.text(object)
-	local textdata = object.formattedtext
-	local x = object.x
-	local y = object.y
-	local shadow = object.shadow
-	local shadowxoffset = object.shadowxoffset
-	local shadowyoffset = object.shadowyoffset
-	local shadowcolor = object.shadowcolor
-	local inlist, list = object:IsInList()
-	local printfunc = function(text, x, y)
-		love.graphics.print(text, math.floor(x + 0.5), math.floor(y + 0.5))
+	if not object.complexText then
+		object:DrawText()
+		return
 	end
-	
-	for k, v in ipairs(textdata) do
-		local textx = v.x
-		local texty = v.y
-		local text = v.text
-		local color = v.color
-		local font = v.font
-		local link = v.link
-		local theight = font:getHeight("a")
-		if inlist then
-			local listy = list.y
-			local listhieght = list.height
-			if (y + texty) <= (listy + listhieght) and y + ((texty + theight)) >= listy then
-				love.graphics.setFont(font)
-				if shadow then
-					love.graphics.setColor(unpack(shadowcolor))
-					printfunc(text, x + textx + shadowxoffset, y + texty + shadowyoffset)
-				end
-				if link then
-					local linkcolor = v.linkcolor
-					local linkhovercolor = v.linkhovercolor
-					local hover = v.hover
-					if hover then
-						love.graphics.setColor(linkhovercolor)
-					else
-						love.graphics.setColor(linkcolor)
-					end
-				else
-					love.graphics.setColor(unpack(color))
-				end
-				printfunc(text, x + textx, y + texty)
-			end
+
+	local currentSymbolTypeParameters = nil
+	for index, symbol in ipairs(object.complexText) do
+		if index < object.currentSymbolIndex then
+			currentSymbolTypeParameters = object.symbolsParameters.printed
+		elseif index > object.currentSymbolIndex then
+			currentSymbolTypeParameters	= object.symbolsParameters.current
 		else
-			love.graphics.setFont(font)
-			if shadow then
-				love.graphics.setColor(unpack(shadowcolor))
-				printfunc(text, x + textx + shadowxoffset, y + texty + shadowyoffset)
-			end
-			if link then
-				local linkcolor = v.linkcolor
-				local linkhovercolor = v.linkhovercolor
-				local hover = v.hover
-				if hover then
-					love.graphics.setColor(linkhovercolor)
-				else
-					love.graphics.setColor(linkcolor)
-				end
-			else
-				love.graphics.setColor(unpack(color))
-			end
-			printfunc(text, x + textx, y + texty)
+			currentSymbolTypeParameters = object.symbolParameters.unprinted
 		end
+
+		local currentSymbolParameters = currentSymbolTypeParameters[symbol] or currentSymbolTypeParameters.other
+
+		love.graphics.setFont(currentSymbolParameters.font)
+		love.graphics.setColor(currentSymbolParameters.color)
+
+		love.graphics.print(symbol.symbol, math.floor(symbolX + 0.5), math.floor(symbolY + 0.5), 0, currentSymbolParameters.scale.x, currentSymbolParameters.scale.y)
 	end
 end
 

@@ -135,9 +135,6 @@ function newobject:draw()
 	local y = self.y
 	local width = self.width
 	local height = self.height
-	local stencilfunc = function()
-		love.graphics.rectangle("fill", x, y, width, height)
-	end
 	
 	self:SetDrawOrder()
 	
@@ -146,20 +143,17 @@ function newobject:draw()
 		drawfunc(self)
 	end
 		
-	love.graphics.stencil(stencilfunc)
-	love.graphics.setStencilTest("greater", 0)
-		
 	local children = self.children
 	if children then
 		for k, v in ipairs(children) do
 			local col = loveframes.BoundingBox(x, v.x, y, v.y, width, v.width, height, v.height)
 			if col then
+				startStencil(v)
 				v:draw()
+				endStencil(v)
 			end
 		end
 	end
-	
-	love.graphics.setStencilTest()
 	
 	local drawfunc = self.DrawOver or self.drawoverfunc
 	if drawfunc then

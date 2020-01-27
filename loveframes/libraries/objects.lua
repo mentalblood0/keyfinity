@@ -117,6 +117,7 @@ end
 	- func: NewObject(id, name, inherit_from_base)
 	- desc: creates a new object
 --]]---------------------------------------------------------
+
 function loveframes.NewObject(id, name, inherit_from_base)
 	
 	local objects = loveframes.objects

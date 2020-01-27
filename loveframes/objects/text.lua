@@ -466,6 +466,15 @@ end
 	- func: DrawText()
 	- desc: draws the object's text
 --]]---------------------------------------------------------
+function newobject:setCurrentSymbolIndex(newIndex)
+	self.currentSymbolIndex = newIndex
+end
+
+function newobject:setComplexText(textArray, symbolsParameters)
+	self.symbolsParameters = symbolsParameters
+	self.textArray = textArray
+end
+
 function newobject:DrawText()
 
 	local textdata = self.formattedtext
