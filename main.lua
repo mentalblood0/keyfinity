@@ -158,4 +158,58 @@ end
 function love.wheelmoved(x, y)
     gui.wheelmoved(x, y)
 end
+
+function getFileName(pathToFile)
+    local reversed = string.reverse(pathToFile)
+    local lastSlashIndex, trash = string.find(reversed, "/") or 0
+    local lastReversedSlashIndex, trash = string.find(reversed, "\\") or 0
+    local slashIndex = #pathToFile - math.max(lastSlashIndex, lastReversedSlashIndex)
+
+    return string.sub(pathToFile, slashIndex + 2, -1)
+end
+
+function extensionOf(file)
+    local pathToFile = file:getFilename()
+    local fileName = getFileName(pathToFile)
+
+    local reversed = string.reverse(fileName)
+    local lastDotIndex, trash = string.find(reversed, ".") or 0
+    if lastDotIndex == 0 then
+        return nil
+    end
+    local dotIndex = #fileName - lastDotIndex
+    print(fileName, dotIndex)
+
+    return string.sub(fileName, dotIndex - 1, -1)
+end
+
+function mouseOnElement(element)
+    local mouseX = love.mouse.getX()
+    local mouseY = love.mouse.getY()
+    local elementX = element:GetX()
+    local elementY = element:GetY()
+    local elementWidth = element:GetWidth()
+    local elementHeight = element:GetHeight()
+
+    return (mouseX > elementX) and (mouseX < (elementX + elementWidth)) and (mouseY > elementY) and (mouseY < (elementY + elementHeight))
+end
+
+function createFileCopy(file)
+    local fileCopyName = getFileName(file:getFilename())
+    local fileCopy = love.filesystem.newFile(fileCopyName)
+    
+    file:open("r")
+    fileCopy:open("w")
+    fileCopy:write(file:read())
+    file:close()
+    fileCopy:close()
+
+    return fileCopyName
+end
+
+function love.filedropped(file)
+    if currentState.filedropped then
+        currentState:filedropped(file)
+    end
+end
 ------------------------

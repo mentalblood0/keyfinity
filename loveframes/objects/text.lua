@@ -491,11 +491,17 @@ function newobject:setComplexText(text, symbolsParameters)
 	self.textString = text.string
 	self.textArray = text.array
 	self.maxHeight = 0
+	self.maxWidth = 0
 	for index, symbol in ipairs(self.textArray) do
 		local maxPossibleHeightOfThisSymbol = 
-			math.max(symbolsParameters.printed.other.font:getHeight(), symbolsParameters.current.other.font:getHeight(), symbolsParameters.unprinted.other.font:getHeight())
+			math.max(symbolsParameters.printed.other.font:getHeight(symbol), symbolsParameters.current.other.font:getHeight(symbol), symbolsParameters.unprinted.other.font:getHeight(symbol))
+		local maxPossibleWidthOfThisSymbol = 
+			math.max(symbolsParameters.printed.other.font:getWidth(symbol), symbolsParameters.current.other.font:getWidth(symbol), symbolsParameters.unprinted.other.font:getWidth(symbol))
 		if maxPossibleHeightOfThisSymbol > self.maxHeight then
 			self.maxHeight = maxPossibleHeightOfThisSymbol
+		end
+		if maxPossibleWidthOfThisSymbol > self.maxWidth then
+			self.maxWidth = maxPossibleWidthOfThisSymbol
 		end
 	end
 end

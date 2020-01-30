@@ -59,9 +59,9 @@ function createModeScreen:enter()
     modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Printed symbols maximum height", "printedSymbolsMaxHeight", 10, 1000, 1, 100)
     modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Current symbol maximum height", "currentSymbolsMaxHeight", 10, 1000, 1, 100)
     modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Unprinted symbols maximum height", "unprintedSymbolsMaxHeight", 10, 1000, 1, 100)
-    modeParameters:addTextInput(currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.ttf")
-    modeParameters:addTextInput(currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.ttf")
-    modeParameters:addTextInput(currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.ttf")
+    modeParameters:addTextInput(currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.ttf", "ttf")
+    modeParameters:addTextInput(currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.ttf", "ttf")
+    modeParameters:addTextInput(currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.ttf", "ttf")
     modeParameters:addColorChanger(currentElements.fontParametersListTab, "Printed symbols color", "printedSymbolsColor", {0.5, 0.5, 0.5, 1})
     modeParameters:addColorChanger(currentElements.fontParametersListTab, "Current symbol color", "currentSymbolColor", {0.5, 0.5, 0.5, 1})
     modeParameters:addColorChanger(currentElements.fontParametersListTab, "Unprinted symbols color", "unprintedSymbolsColor", {0.5, 0.5, 0.5, 1})
@@ -78,6 +78,22 @@ function createModeScreen:enter()
     currentElements.cancelButton = gui.Create("button")
     currentElements.cancelButton:SetText("Cancel")
     currentElements.cancelButton.OnClick = function(this) switchToState("selectModeScreen") end
+end
+
+function createModeScreen:filedropped(file)
+    for name, parameter in pairs(modeParameters.raw) do
+        if parameter.valueType == "string" then
+            if mouseOnElement(parameter.element) then
+                if parameter.fileExtension then
+                    print(parameter.fileExtension, extensionOf(file))
+                    if parameter.fileExtension == extensionOf(file) then
+                        local fileName = createFileCopy(file)
+                        parameter.element:SetText(fileName)
+                    end
+                end
+            end
+        end
+    end
 end
 
 return createModeScreen

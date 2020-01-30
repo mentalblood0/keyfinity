@@ -958,7 +958,7 @@ function skin.text(object)
 
 		skin.PrintText(symbol, symbolX, symbolY)
 
-		alreadyPrintedInThisCycleSymbolsWidth = alreadyPrintedInThisCycleSymbolsWidth + currentSymbolWidth
+		alreadyPrintedInThisCycleSymbolsWidth = alreadyPrintedInThisCycleSymbolsWidth + currentSymbolWidth --+ object.maxWidth / 32
 	end
 end
 

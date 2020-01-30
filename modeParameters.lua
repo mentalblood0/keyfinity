@@ -11,10 +11,11 @@ function modeParameters:addText(parentElement, text)
     table.insert(currentElements, textElement)
 end
 
-function modeParameters:registerModeParameter(internalName, element, valueType)
+function modeParameters:registerModeParameter(internalName, element, valueType, fileExtension)
     modeParameters.raw[internalName] = {}
     modeParameters.raw[internalName].element = element
     modeParameters.raw[internalName].valueType = valueType
+    modeParameters.raw[internalName].fileExtension = fileExtension
 end
 
 function modeParameters:addIntegerNumberbox(parentElement, name, internalName, minValue, maxValue, step, defaultValue)
@@ -45,7 +46,7 @@ function modeParameters:addColorChanger(parentElement, name, internalName, defau
     currentElements[internalName .. "ColorChanger"] = colorChanger
 end
 
-function modeParameters:addTextInput(parentElement, name, internalName, defaultValue)
+function modeParameters:addTextInput(parentElement, name, internalName, defaultValue, fileExtension)
     modeParameters:addText(parentElement, name)
 
     local textInput = gui.Create("textinput")
@@ -53,7 +54,7 @@ function modeParameters:addTextInput(parentElement, name, internalName, defaultV
     textInput:setProperFontSize(currentState.defaultFontFileName)
     textInput:SetText(defaultValue)
 
-    modeParameters:registerModeParameter(internalName, textInput, "string")
+    modeParameters:registerModeParameter(internalName, textInput, "string", fileExtension)
 
     currentElements[internalName .. "TextInput"] = textInput
 end

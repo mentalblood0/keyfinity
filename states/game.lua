@@ -19,6 +19,16 @@ function game:fontFor(type)
     ))
 end
 
+function game:newFontFor(newFontFileName, type)
+    return love.graphics.newFont(
+        newFontFileName, 
+        fonting:fontSizeToFitHeight(game:getParameter(type .. "SymbolsFontFileName"),
+            game:getParameter(type .. "SymbolsMaxHeight"),
+            game:getParameter("allowedSymbols")
+        )
+    )
+end
+
 function game:loadSymbolsParameters()
     symbolsParameters = {
         printed = {
