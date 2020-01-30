@@ -1,19 +1,18 @@
 local textGenerator = {}
 
-englishLetters = "qwertyuiopasdfghjklzxcvbnm        "
+textGenerator.englishLetters = "qwertyuiopasdfghjklzxcvbnm "
 
 function getCharByIndex(someString, charIndex)
     return string.char(string.byte(someString, charIndex))
 end
 
-function textGenerator:randomSymbols(numberOfSymbols)
-    local possibleSymbols = englishLetters
+function textGenerator:randomSymbols(numberOfSymbols, possibleSymbols)
     local numberOfPossibleSymbols = #possibleSymbols
 
-    local result = {text = "", array = {}}
+    local result = {string = "", array = {}}
     for symbolNumber = 1, numberOfSymbols do
         local newSymbol = getCharByIndex(possibleSymbols, math.random(numberOfPossibleSymbols))
-        result.text = result.text .. newSymbol
+        result.string = result.string .. newSymbol
         result.array[symbolNumber] = newSymbol
     end
 

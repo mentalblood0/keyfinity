@@ -18,4 +18,18 @@ function fonting:fontSizeToFitIntoRect(fontFileName, rectWidth, rectHeight, text
 	return fontSize
 end
 
+function fonting:fontSizeToFitHeight(fontFileName, height, text)
+	local fontSize = math.floor(height / 1.3)
+    local font = love.graphics.newFont(fontFileName, fontSize)
+    while font:getHeight(text) * 1.3 < height do
+		fontSize = fontSize + 1
+		font = love.graphics.newFont(fontFileName, fontSize)
+    end
+    while font:getHeight(text) * 1.3 > height do
+		fontSize = fontSize - 1
+		font = love.graphics.newFont(fontFileName, fontSize)
+	end
+	return fontSize
+end
+
 return fonting

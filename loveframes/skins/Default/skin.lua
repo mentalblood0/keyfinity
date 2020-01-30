@@ -931,19 +931,20 @@ end
 	- desc: draws the text object
 --]]---------------------------------------------------------
 function skin.text(object)
-	if not object.complexText then
+	if not object.textArray then
 		object:DrawText()
 		return
 	end
 
 	local currentSymbolTypeParameters = nil
-	for index, symbol in ipairs(object.complexText) do
+	local alreadyPrintedInThisCycleSymbolsWidth = 0
+	for index, symbol in ipairs(object.textArray) do
 		if index < object.currentSymbolIndex then
 			currentSymbolTypeParameters = object.symbolsParameters.printed
 		elseif index > object.currentSymbolIndex then
-			currentSymbolTypeParameters	= object.symbolsParameters.current
+			currentSymbolTypeParameters	= object.symbolsParameters.unprinted
 		else
-			currentSymbolTypeParameters = object.symbolParameters.unprinted
+			currentSymbolTypeParameters = object.symbolsParameters.current
 		end
 
 		local currentSymbolParameters = currentSymbolTypeParameters[symbol] or currentSymbolTypeParameters.other
@@ -951,7 +952,13 @@ function skin.text(object)
 		love.graphics.setFont(currentSymbolParameters.font)
 		love.graphics.setColor(currentSymbolParameters.color)
 
-		love.graphics.print(symbol.symbol, math.floor(symbolX + 0.5), math.floor(symbolY + 0.5), 0, currentSymbolParameters.scale.x, currentSymbolParameters.scale.y)
+		local currentSymbolWidth = currentSymbolParameters.font:getWidth(string.sub(object.textString, index, index))
+		local symbolX = object.x + alreadyPrintedInThisCycleSymbolsWidth
+		local symbolY = object.y + object.maxHeight - currentSymbolParameters.font:getHeight(string.sub(object.textString, index, index)) / 2
+
+		skin.PrintText(symbol, symbolX, symbolY)
+
+		alreadyPrintedInThisCycleSymbolsWidth = alreadyPrintedInThisCycleSymbolsWidth + currentSymbolWidth
 	end
 end
 

@@ -448,7 +448,11 @@ end
 --]]---------------------------------------------------------
 function newobject:GetText()
 
-	return self.text
+	if self.textString ~= nil then
+		return self.textString
+	else
+		return self.text
+	end
 	
 end
 
@@ -470,9 +474,38 @@ function newobject:setCurrentSymbolIndex(newIndex)
 	self.currentSymbolIndex = newIndex
 end
 
-function newobject:setComplexText(textArray, symbolsParameters)
+function newobject:nextSymbol()
+	if self.currentSymbolIndex >= #self.textString then
+		return false
+	end
+	self.currentSymbolIndex = self.currentSymbolIndex + 1
+	return true
+end
+
+function newobject:getCurrentSymbol()
+	return self.textArray[self.currentSymbolIndex]
+end
+
+function newobject:setComplexText(text, symbolsParameters)
 	self.symbolsParameters = symbolsParameters
-	self.textArray = textArray
+	self.textString = text.string
+	self.textArray = text.array
+	self.maxHeight = 0
+	for index, symbol in ipairs(self.textArray) do
+		local maxPossibleHeightOfThisSymbol = 
+			math.max(symbolsParameters.printed.other.font:getHeight(), symbolsParameters.current.other.font:getHeight(), symbolsParameters.unprinted.other.font:getHeight())
+		if maxPossibleHeightOfThisSymbol > self.maxHeight then
+			self.maxHeight = maxPossibleHeightOfThisSymbol
+		end
+	end
+end
+
+function newobject:alignTextSymbolToCenter(x, y)
+	local text = self.textString
+	local font = self.symbolsParameters.printed.other.font
+    textLengthInPixels = font:getWidth(string.sub(self.textString, 1, self.currentSymbolIndex)) - font:getWidth(string.sub(self.textString, self.currentSymbolIndex, self.currentSymbolIndex)) / 2
+    textHeightInPixels = font:getHeight()
+    self:SetPos(x - textLengthInPixels, y - textHeightInPixels / 2)
 end
 
 function newobject:DrawText()

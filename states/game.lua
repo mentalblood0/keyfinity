@@ -4,54 +4,57 @@ local currentSymbols = nil
 local currentSymbolIndex = nil
 local textToTypeLength = nil
 local fontParameters = nil
+local allowedSymbols = nil
 
-function getParameter(parameterName)
+function game:getParameter(parameterName)
     return userProfiles[currentUserProfileName].modes[currentModeName][parameterName]
 end
 
-function loadSymbolsParameters()
+function game:fontFor(type)
+    return love.graphics.newFont(
+        game:getParameter(type .. "SymbolsFontFileName"), 
+        fonting:fontSizeToFitHeight(game:getParameter(type .. "SymbolsFontFileName"),
+        game:getParameter(type .. "SymbolsMaxHeight"),
+        game:getParameter("allowedSymbols")
+    ))
+end
+
+function game:loadSymbolsParameters()
     symbolsParameters = {
         printed = {
             other = {
-                font = getParameter("printedSymbolsDefaultFontFileName"),
-                color = getParameter("printedSymbolsDefaultColor"), 
-                scale = {x = getParameter("printedSymbolsDefaultScalePercents") / 100, y = getParameter("printedSymbolsDefaultScalePercents") / 100}
+                font = game:fontFor("printed"),
+                color = game:getParameter("printedSymbolsColor")
             }
         },
         current = {
             other = {
-                font = getParameter("currentSymbolDefaultFontFileName"),
-                color = getParameter("currentSymbolDefaultColor"), 
-                scale = {x = getParameter("currentSymbolDefaultScalePercents") / 100, y = getParameter("currentSymbolDefaultScalePercents") / 100}
+                font = game:fontFor("current"),
+                color = game:getParameter("currentSymbolColor")
             }
         },
         unprinted = {
             other = {
-                font = getParameter("unprintedSymbolsDefaultFontFileName"),
-                color = getParameter("unprintedSymbolsDefaultColor"), 
-                scale = {x = getParameter("unprintedSymbolsDefaultScalePercents") / 100, y = getParameter("unprintedSymbolsDefaultScalePercents") / 100}
+                font = game:fontFor("unprinted"),
+                color = game:getParameter("unprintedSymbolsColor")
             }
         }
     }
 end
 
-function generateNewText()
-    textToTypeLength = getParameter("textLineLength")
-    local newText = textGenerator:randomSymbols(textToTypeLength)
-    currentElements.textToType:setComplexText(newText.array, symbolsParameters)
-    currentSymbols = newText.array
-    currentSymbolIndex = 1
+function game:loadTextParameters()
+    allowedSymbols = game:getParameter("allowedSymbols")
 end
 
-function alignTextSymbolToCenter(element, symbolNumber, x, y)
-    local text = element:GetText()
-    textLengthInPixels = element.font:getWidth(string.sub(text .. " ", 1, symbolNumber)) - element.font:getWidth(string.sub(text .. " ", symbolNumber, symbolNumber)) / 2
-    textHeightInPixels = element.font:getHeight()
-    element:SetPos(x - textLengthInPixels, y - textHeightInPixels / 2)
+function game:generateNewText()
+    textToTypeLength = game:getParameter("textLineLength")
+    local newText = textGenerator:randomSymbols(textToTypeLength, game:getParameter("allowedSymbols"))
+    currentElements.textToType:setComplexText(newText, symbolsParameters)
+    currentElements.textToType:setCurrentSymbolIndex(1)
 end
 
 function game:refreshTextAlignment()
-    alignTextSymbolToCenter(currentElements.textToType, currentSymbolIndex, windowWidth / 2, windowHeight / 2)
+    currentElements.textToType:alignTextSymbolToCenter(windowWidth / 2, windowHeight / 2)
 end
 
 function game:updateElementsPositionAndSize()
@@ -59,26 +62,25 @@ function game:updateElementsPositionAndSize()
     currentElements.exitButton:SetSize(windowWidth / 64, windowWidth / 64)
     currentElements.exitButton:setProperFontSize(game.defaultFontFileName)
 
-    currentElements.textToType:SetSize(windowWidth * 2, getParameter("maxTextHeight"))
-    currentElements.textToType:setProperFontSize(getParameter("defaultFontFileName"))
+    currentElements.textToType:SetSize(windowWidth * 2, game:getParameter("maxTextHeight"))
     game:refreshTextAlignment()
 end
 
 function game:enter()
+    game:loadSymbolsParameters()
     currentElements.exitButton = gui.Create("button")
     currentElements.exitButton:SetText("x")
     currentElements.exitButton.OnClick = function(this) switchToState("mainMenu") end
 
     currentElements.textToType = gui.Create("text")
-    generateNewText()
+    game:generateNewText()
 end
 
 function game:textinput(text)
-    local correctSymbol = currentSymbols[currentSymbolIndex]
+    local correctSymbol = currentElements.textToType:getCurrentSymbol()
     if text == correctSymbol then
-        currentSymbolIndex = currentSymbolIndex + 1
-        if currentSymbolIndex > textToTypeLength then
-            generateNewText()
+        if not currentElements.textToType:nextSymbol() then
+            game:generateNewText()
         end
         game:refreshTextAlignment()
     end
