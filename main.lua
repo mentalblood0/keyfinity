@@ -178,7 +178,6 @@ function extensionOf(file)
         return nil
     end
     local dotIndex = #fileName - lastDotIndex
-    print(fileName, dotIndex)
 
     return string.sub(fileName, dotIndex - 1, -1)
 end

@@ -83,12 +83,13 @@ end
 function createModeScreen:filedropped(file)
     for name, parameter in pairs(modeParameters.raw) do
         if parameter.valueType == "string" then
-            if mouseOnElement(parameter.element) then
-                if parameter.fileExtension then
-                    print(parameter.fileExtension, extensionOf(file))
-                    if parameter.fileExtension == extensionOf(file) then
-                        local fileName = createFileCopy(file)
-                        parameter.element:SetText(fileName)
+            if parameter.element:GetParent().visible then
+                if mouseOnElement(parameter.element) then
+                    if parameter.fileExtension then
+                        if parameter.fileExtension == extensionOf(file) then
+                            local fileName = createFileCopy(file)
+                            parameter.element:SetText(fileName)
+                        end
                     end
                 end
             end
