@@ -33,6 +33,36 @@ local obj1 = {
 					[4] = 1;
 				};
 			};
+			["file"] = {
+				["currentSymbolColor"] = {
+					[1] = 0.50196078431373;
+					[2] = 0.50196078431373;
+					[3] = 0.50196078431373;
+					[4] = 1;
+				};
+				["currentSymbolsFontFileName"] = "font.ttf";
+				["printedSymbolsFontFileName"] = "font.ttf";
+				["textFileName"] = "file.txt";
+				["unprintedSymbolsColor"] = {
+					[1] = 0.50196078431373;
+					[2] = 0.50196078431373;
+					[3] = 0.50196078431373;
+					[4] = 1;
+				};
+				["printedSymbolsMaxHeight"] = 100;
+				["contentType"] = "text from the file";
+				["unprintedSymbolsFontFileName"] = "font.ttf";
+				["currentSymbolsMaxHeight"] = 100;
+				["unprintedSymbolsMaxHeight"] = 100;
+				["allowedSymbols"] = "qwertyuiopasdfghjklzxcvbnm ";
+				["textLineLength"] = 1;
+				["printedSymbolsColor"] = {
+					[1] = 0.50196078431373;
+					[2] = 0.50196078431373;
+					[3] = 0.50196078431373;
+					[4] = 1;
+				};
+			};
 			["mode"] = {
 				["currentSymbolColor"] = {
 					[1] = 0.50196078431373;

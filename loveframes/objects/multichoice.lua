@@ -31,8 +31,51 @@ function newobject:initialize()
 	self.internal = false
 	self.choices = {}
 	self.listheight = nil
+
+	self.elementsToShowOnChoice = {}
 	
 	self:SetDrawFunc()
+end
+
+function newobject:getFirstParentThatIsList()
+	local parent = self:GetParent()
+	while parent do
+		if parent:GetType() == "list" then
+			return parent
+		end
+		parent = parent:GetParent()
+	end
+	return nil
+end
+
+function newobject:showHideProperElements()
+	if not self.elementsToShowOnChoice[self.choice] then
+		return
+	end
+	for element, visible in pairs(self.elementsToShowOnChoice[self.choice]) do
+		element:SetVisible(visible)
+	end
+	self:getFirstParentThatIsList():CalculateSize()
+end
+
+function newobject:showElementOnChoice(element, choice)
+	if not self.elementsToShowOnChoice[choice] then
+		return
+	end
+	self.elementsToShowOnChoice[choice][element] = true
+	if choice == self.choice then
+		element:SetVisible(true)
+	end
+end
+
+function newobject:hideElementOnChoice(element, choice)
+	if not self.elementsToShowOnChoice[choice] then
+		return
+	end
+	self.elementsToShowOnChoice[choice][element] = false
+	if choice == self.choice then
+		element:SetVisible(false)
+	end
 end
 
 --[[---------------------------------------------------------
@@ -56,6 +99,8 @@ function newobject:update(dt)
 			return
 		end
 	end
+
+	self:showHideProperElements()
 	
 	local parent = self.parent
 	local base = loveframes.base
@@ -139,7 +184,9 @@ end
 function newobject:AddChoice(choice)
 
 	local choices = self.choices
-	table.insert(choices, choice)
+	table.insert(self.choices, choice)
+	self.elementsToShowOnChoice[choice] = {}
+	self:SetChoice(choice)
 	
 	return self
 	

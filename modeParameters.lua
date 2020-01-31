@@ -3,8 +3,11 @@ local modeParameters = {}
 modeParameters.raw = {}
 modeParameters.converted = {}
 
-function modeParameters:addText(parentElement, text)
+function modeParameters:addText(parentElement, text, elementTextReferTo)
     local textElement = gui.Create("text")
+    if elementTextReferTo then
+        elementTextReferTo.nameText = textElement
+    end
     textElement:SetText(text)
     parentElement:AddItem(textElement)
 
@@ -19,9 +22,8 @@ function modeParameters:registerModeParameter(internalName, element, valueType, 
 end
 
 function modeParameters:addIntegerNumberbox(parentElement, name, internalName, minValue, maxValue, step, defaultValue)
-    modeParameters:addText(parentElement, name)
-
     local numberbox = gui.Create("numberbox")
+    modeParameters:addText(parentElement, name, numberbox)
     parentElement:AddItem(numberbox)
     numberbox:SetIncreaseAmount(step)
     numberbox:SetDecreaseAmount(step)
@@ -35,9 +37,8 @@ function modeParameters:addIntegerNumberbox(parentElement, name, internalName, m
 end
 
 function modeParameters:addColorChanger(parentElement, name, internalName, defaultColor)
-    modeParameters:addText(parentElement, name)
-
     local colorChanger = complexGui:Create("colorChanger")
+    modeParameters:addText(parentElement, name, colorChanger)
     colorChanger:setColor(defaultColor)
     parentElement:AddItem(colorChanger)
 
@@ -47,9 +48,8 @@ function modeParameters:addColorChanger(parentElement, name, internalName, defau
 end
 
 function modeParameters:addTextInput(parentElement, name, internalName, defaultValue, fileExtension)
-    modeParameters:addText(parentElement, name)
-
     local textInput = gui.Create("textinput")
+    modeParameters:addText(parentElement, name, textInput)
     parentElement:AddItem(textInput)
     textInput:setProperFontSize(currentState.defaultFontFileName)
     textInput:SetText(defaultValue)
@@ -57,6 +57,16 @@ function modeParameters:addTextInput(parentElement, name, internalName, defaultV
     modeParameters:registerModeParameter(internalName, textInput, "string", fileExtension)
 
     currentElements[internalName .. "TextInput"] = textInput
+end
+
+function modeParameters:addMultichoice(parentElement, name, internalName)
+    local multichoice = gui.Create("multichoice")
+    modeParameters:addText(parentElement, name, multichoice)
+    parentElement:AddItem(multichoice)
+
+    modeParameters:registerModeParameter(internalName, multichoice, "choice")
+
+    currentElements[internalName .. "Multichoice"] = multichoice
 end
 
 function modeParameters:convert()
@@ -71,6 +81,8 @@ function modeParameters:convert()
             modeParameters.converted[parameterInternalName] = parameter.element:GetText()
         elseif parameter.valueType == "color" then
             modeParameters.converted[parameterInternalName] = parameter.element:getColor()
+        elseif parameter.valueType == "choice" then
+            modeParameters.converted[parameterInternalName] = parameter.element:GetChoice()
         end
 
     end

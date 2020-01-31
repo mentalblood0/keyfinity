@@ -1849,6 +1849,10 @@ end
 function newobject:SetVisible(bool)
 
 	self.visible = bool
+
+	if self.nameText then
+		self.nameText:SetVisible(bool)
+	end
 	
 	if not bool then
 		self.keydown = "none"

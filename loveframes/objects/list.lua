@@ -292,7 +292,7 @@ end
 	- desc: calculates the size of the object's children
 --]]---------------------------------------------------------
 function newobject:CalculateSize()
-	
+
 	local numitems = #self.children
 	local height = self.height
 	local width = self.width
@@ -334,7 +334,9 @@ function newobject:CalculateSize()
 			self.itemheight = itemheight
 		else
 			for k, v in ipairs(children) do
-				itemheight = itemheight + v.height + spacing
+				if v.visible then
+					itemheight = itemheight + v.height + spacing
+				end
 			end
 			self.itemheight = (itemheight - spacing) + padding
 		end
@@ -439,28 +441,30 @@ function newobject:RedoLayout()
 				end
 			else
 				for k, v in ipairs(children) do
-					local itemwidth = v.width
-					local itemheight = v.height
-					local retainsize = v.retainsize
-					v.staticx = padding
-					v.staticy = starty
-					v.lastheight = itemheight
-					if vbar then
-						if itemwidth + padding > (width - scrollbodywidth) then
-							v:SetWidth((width - scrollbodywidth) - (padding * 2))
+					if v.visible then
+						local itemwidth = v.width
+						local itemheight = v.height
+						local retainsize = v.retainsize
+						v.staticx = padding
+						v.staticy = starty
+						v.lastheight = itemheight
+						if vbar then
+							if itemwidth + padding > (width - scrollbodywidth) then
+								v:SetWidth((width - scrollbodywidth) - (padding * 2))
+							end
+							if not retainsize then
+								v:SetWidth((width - scrollbodywidth) - (padding * 2))
+							end
+							scrollbody.staticx = width - scrollbodywidth
+							scrollbody.height = height
+						else
+							if not retainsize then
+								v:SetWidth(width - (padding * 2))
+							end
 						end
-						if not retainsize then
-							v:SetWidth((width - scrollbodywidth) - (padding * 2))
-						end
-						scrollbody.staticx = width - scrollbodywidth
-						scrollbody.height = height
-					else
-						if not retainsize then
-							v:SetWidth(width - (padding * 2))
-						end
+						starty = starty + itemheight
+						starty = starty + spacing
 					end
-					starty = starty + itemheight
-					starty = starty + spacing
 				end
 			end
 		elseif display == "horizontal" then

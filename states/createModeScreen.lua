@@ -69,7 +69,18 @@ function createModeScreen:enter()
     currentElements.textParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Text", currentElements.textParametersListTab, "Text parameters")
     modeParameters:addIntegerNumberbox(currentElements.textParametersListTab, "Text line length", "textLineLength", 1, 1000, 1)
+    modeParameters:addMultichoice(currentElements.textParametersListTab, "Content type", "contentType")
     modeParameters:addTextInput(currentElements.textParametersListTab, "Allowed symbols", "allowedSymbols", textGenerator.englishLetters)
+    modeParameters:addTextInput(currentElements.textParametersListTab, "Text file name", "textFileName", "", "txt")
+    currentElements.contentTypeMultichoice:AddChoice("random characters from the set")
+    currentElements.contentTypeMultichoice:AddChoice("text from the file")
+    currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.allowedSymbolsTextInput, "random characters from the set")
+    currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.textFileNameTextInput, "random characters from the set")
+    currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.textFileNameTextInput, "text from the file")
+    currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.allowedSymbolsTextInput, "text from the file")
+    for choice, content in pairs(currentElements.contentTypeMultichoice.choices) do
+        print(choice)
+    end
     
     currentElements.addButton = gui.Create("button")
     currentElements.addButton:SetText("Create")

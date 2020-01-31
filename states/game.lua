@@ -5,6 +5,9 @@ local currentSymbolIndex = nil
 local textToTypeLength = nil
 local fontParameters = nil
 local allowedSymbols = nil
+local textFromFile = nil
+local symbolsTyped = nil
+local functionToGenerateNewText = nil
 
 function game:getParameter(parameterName)
     return userProfiles[currentUserProfileName].modes[currentModeName][parameterName]
@@ -53,12 +56,26 @@ function game:loadSymbolsParameters()
 end
 
 function game:loadTextParameters()
-    allowedSymbols = game:getParameter("allowedSymbols")
+    local contentType = game:getParameter("contentType")
+    if contentType == "random characters from the set" then
+        functionToGenerateNewText = function() return textGenerator:randomSymbols(textToTypeLength, game:getParameter("allowedSymbols")) end
+    elseif contentType == "text from the file" then
+        local fileWithText = love.filesystem.newFile(game:getParameter("textFileName"))
+        fileWithText:open("r")
+        textFromFile = fileWithText:read()
+        fileWithText:close()
+        symbolsTyped = 0
+        functionToGenerateNewText = function()
+            local textString = string.sub(textFromFile, symbolsTyped + 1, symbolsTyped + 1 + textToTypeLength - 1)
+            local textArray = textGenerator:makeArrayFromString(textString)
+            return {string = textString, array = textArray}
+        end
+    end
 end
 
 function game:generateNewText()
     textToTypeLength = game:getParameter("textLineLength")
-    local newText = textGenerator:randomSymbols(textToTypeLength, game:getParameter("allowedSymbols"))
+    local newText = functionToGenerateNewText()
     currentElements.textToType:setComplexText(newText, symbolsParameters)
     currentElements.textToType:setCurrentSymbolIndex(1)
 end
@@ -78,6 +95,7 @@ end
 
 function game:enter()
     game:loadSymbolsParameters()
+    game:loadTextParameters()
     currentElements.exitButton = gui.Create("button")
     currentElements.exitButton:SetText("x")
     currentElements.exitButton.OnClick = function(this) switchToState("mainMenu") end
@@ -89,6 +107,7 @@ end
 function game:textinput(text)
     local correctSymbol = currentElements.textToType:getCurrentSymbol()
     if text == correctSymbol then
+        symbolsTyped = symbolsTyped + 1
         if not currentElements.textToType:nextSymbol() then
             game:generateNewText()
         end
