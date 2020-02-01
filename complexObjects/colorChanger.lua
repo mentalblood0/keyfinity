@@ -1,6 +1,6 @@
 local colorChanger = {}
 
-function colorChanger:Create()
+function colorChanger:Create(args)
 	local panel = gui.Create("panel")
 	panel.color = {0, 0, 0, 1}
 	

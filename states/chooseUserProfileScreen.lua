@@ -14,6 +14,12 @@ function chooseUserProfileScreen:updateElementsPositionAndSize()
     currentElements.chooseUserList:SetEqualChildrenFontSize(currentState.defaultFontFileName)
 end
 
+function chooseUserProfileScreen:addUserButtons(userName)
+    local newButton = complexGui:Create("userButtons", userName)
+    currentElements.chooseUserList:AddItem(newButton)
+    currentElements[userName .. "UserButton"] = newButton
+end
+
 function chooseUserProfileScreen:enter()
     currentElements.chooseUserList = gui.Create("list")
 
@@ -22,12 +28,7 @@ function chooseUserProfileScreen:enter()
     currentElements.addUserButton.OnClick = function(this) switchToState("createUserScreen") end
 
     for userName, userProfile in next, userProfiles, nil do
-        local newButton = gui.Create("button")
-        newButton:SetHeight(100)
-        newButton:SetText(userName)
-        newButton.OnClick = function(this) currentUserProfileName = this.text; switchToState("selectModeScreen") end
-
-        currentElements.chooseUserList:AddItem(newButton)
+        chooseUserProfileScreen:addUserButtons(userName)
     end
 end
 

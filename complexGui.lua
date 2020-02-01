@@ -13,8 +13,8 @@ function complexGui:searchAndAddObjects()
     end
 end
 
-function complexGui:Create(objectName)
-    local object = complexGui.objects[objectName]:Create()
+function complexGui:Create(objectName, args)
+    local object = complexGui.objects[objectName]:Create(args)
     object.complex = objectName
     object.updateChildrenPositionAndSize = function(this)
 		for key, child in pairs(this:GetChildren()) do

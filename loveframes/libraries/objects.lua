@@ -137,6 +137,7 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	object.getProperFontSize = function(this, fontFileName)
+		print(this:GetText())
 		return fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this:GetText())
 	end
 
@@ -170,9 +171,13 @@ function loveframes.NewObject(id, name, inherit_from_base)
 
 		object.SetEqualChildrenFontSize = function(this, fontFileName)
 			local children = this:GetChildren()
+			if not children then
+				return
+			end
 			local minFontSize = 0
 			for key, value in next, children, nil do
-				if children[key].text then
+				print(key)
+				if children[key].GetText and children[key]:GetText() then
 					local currentChildFontSize = children[key]:getProperFontSize(fontFileName)
 					if (currentChildFontSize < minFontSize) or (minFontSize == 0) then
 						minFontSize = currentChildFontSize
@@ -180,7 +185,9 @@ function loveframes.NewObject(id, name, inherit_from_base)
 				end
 			end
 			for key, value in next, children, nil do
-				children[key]:SetFont(love.graphics.newFont(fontFileName, minFontSize))
+				if children[key].GetText and children[key]:GetText() then
+					children[key]:SetFont(love.graphics.newFont(fontFileName, minFontSize))
+				end
 			end
 		end
 
