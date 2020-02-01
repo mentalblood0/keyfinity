@@ -1,5 +1,12 @@
 local createUserScreen = {defaultFontFileName = "font.ttf"}
 
+local nameBeforeEditing
+
+function loadParametersToEdit()
+    nameBeforeEditing = currentUserProfileName
+    currentElements.nameInput:SetText(currentUserProfileName)
+end
+
 function createUserButtonClick()
     local userName = currentElements.nameInput:GetText()
     if userProfiles == nil then
@@ -7,6 +14,7 @@ function createUserButtonClick()
     end
     if userProfiles[userName] == nil then
         userProfiles[userName] = {}
+        userProfiles[nameBeforeEditing] = nil
         IPL.store(userProfilesFileName, userProfiles)
     end
 
@@ -34,7 +42,11 @@ function createUserScreen:enter()
     currentElements.newUserList:AddItem(currentElements.nameInput)
     
     currentElements.addButton = gui.Create("button")
-    currentElements.addButton:SetText("Create")
+    if editing then
+        currentElements.addButton:SetText("Save")
+    else
+        currentElements.addButton:SetText("Create")
+    end
     currentElements.addButton.OnClick = function(this) createUserButtonClick() end
     currentElements.newUserList:AddItem(currentElements.addButton)
 
@@ -42,6 +54,10 @@ function createUserScreen:enter()
     currentElements.cancelButton:SetText("Cancel")
     currentElements.cancelButton.OnClick = function(this) switchToState("chooseUserProfileScreen") end
     currentElements.newUserList:AddItem(currentElements.cancelButton)
+
+    if editing then
+        loadParametersToEdit()
+    end
 end
 
 return createUserScreen

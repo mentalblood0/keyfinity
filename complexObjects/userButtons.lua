@@ -1,7 +1,11 @@
 local userButtons = {}
 
+editing = false
+
 function editUser(userName)
-    
+    currentUserProfileName = userName
+    editing = true
+    switchToState("createUserScreen")
 end
 
 function deleteUser(userName)

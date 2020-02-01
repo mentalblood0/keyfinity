@@ -3,8 +3,6 @@ local multiRefObjects = {
 
 } -- multiRefObjects
 local obj1 = {
-	["fsdafsa"] = {
-	};
 	["username"] = {
 		["modes"] = {
 			["file"] = {
@@ -94,6 +92,8 @@ local obj1 = {
 				};
 			};
 		};
+	};
+	[""] = {
 	};
 }
 return obj1
