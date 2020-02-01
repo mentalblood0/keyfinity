@@ -10,6 +10,7 @@ end
 
 function deleteUser(userName)
     userProfiles[userName] = nil
+    save()
     switchToState("chooseUserProfileScreen")
 end
 

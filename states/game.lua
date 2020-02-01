@@ -1,4 +1,4 @@
-local game = {defaultFontFileName = "font.ttf"}
+local game = {defaultFontFileName = "font.otf"}
 
 local currentSymbols = nil
 local currentSymbolIndex = nil
@@ -9,8 +9,8 @@ local textFromFile = nil
 local symbolsTyped = nil
 local functionToGenerateNewText = nil
 
-function game:getParameter(parameterName)
-    return userProfiles[currentUserProfileName].modes[currentModeName][parameterName]
+function game:getParameter(name)
+    return userProfiles[currentUserProfileName].modes[currentModeName][name]
 end
 
 function game:fontFor(type)
@@ -56,6 +56,7 @@ function game:loadSymbolsParameters()
 end
 
 function game:loadTextParameters()
+    symbolsTyped = 0
     local contentType = game:getParameter("contentType")
     if contentType == "random characters from the set" then
         functionToGenerateNewText = function() return textGenerator:randomSymbols(textToTypeLength, game:getParameter("allowedSymbols")) end
@@ -64,7 +65,6 @@ function game:loadTextParameters()
         fileWithText:open("r")
         textFromFile = fileWithText:read()
         fileWithText:close()
-        symbolsTyped = 0
         functionToGenerateNewText = function()
             local textString = string.sub(textFromFile, symbolsTyped + 1, symbolsTyped + 1 + textToTypeLength - 1)
             local textArray = textGenerator:makeArrayFromString(textString)

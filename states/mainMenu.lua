@@ -1,4 +1,4 @@
-local mainMenu = {defaultFontFileName = "font.ttf"}
+local mainMenu = {defaultFontFileName = "font.otf"}
 
 function mainMenu:updateElementsPositionAndSize()
     currentElements.mainMenuList:SetPos(windowWidth / 32, windowHeight / 32)

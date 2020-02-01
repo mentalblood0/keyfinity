@@ -1,4 +1,4 @@
-local createUserScreen = {defaultFontFileName = "font.ttf"}
+local createUserScreen = {defaultFontFileName = "font.otf"}
 
 local nameBeforeEditing
 

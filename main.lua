@@ -11,6 +11,7 @@ complexGui = require "complexGui"
 TLfres = require "dependencies/tlfres"
 IPL = require "dependencies/IPL"
 
+parameters = require "parameters"
 textGenerator = require "textGenerator"
 
 ----------------------
@@ -72,7 +73,7 @@ function switchToState(stateName)
     currentState:enter()
     currentState:updateElementsPositionAndSize()
     updateComplexElementsChildrenPositionAndSize()
-    love.graphics.setBackgroundColor({0.1, 0.4, 0.3, 1})
+    love.graphics.setBackgroundColor({0.0, 0.2, 0.25, 1})
 end
 
 --------------------------------------
@@ -96,6 +97,10 @@ function loadSavedUserProfiles()
             IPL.store(userProfilesFileName, userProfiles)
         end
     end
+end
+
+function save()
+    IPL.store(userProfilesFileName, userProfiles)
 end
 
 --------------------------------------

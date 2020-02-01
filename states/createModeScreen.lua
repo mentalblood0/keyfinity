@@ -1,24 +1,15 @@
-local createModeScreen = {defaultFontFileName = "font.ttf"}
-
-local modeParameters = require "modeParameters"
+local createModeScreen = {defaultFontFileName = "font.otf"}
 
 function createModeScreen:addButtonClick()
-    local convertedSuccessfully = modeParameters:convert()
-    if not convertedSuccessfully then
-        return
-    end
-
     local newModeName = currentElements.nameInput:GetText()
     if userProfiles[currentUserProfileName].modes == nil then
         userProfiles[currentUserProfileName].modes = {}
     end
     userProfiles[currentUserProfileName].modes[newModeName] = {}
 
-    for parameterName, parameterValue in pairs(modeParameters.converted) do
-        userProfiles[currentUserProfileName].modes[newModeName][parameterName] = parameterValue
-    end
+    parameters:convertAndWriteToTable("mode", userProfiles[currentUserProfileName].modes[newModeName])
 
-    IPL.store(userProfilesFileName, userProfiles)
+    save()
 
     switchToState("selectModeScreen")
 end
@@ -43,6 +34,8 @@ function createModeScreen:updateElementsPositionAndSize()
 end
 
 function createModeScreen:enter()
+    parameters:newGroup("mode")
+
     currentElements.newModeParameters = gui.Create("tabs")
     currentElements.newModeParameters:SetPos(windowWidth / 32, windowHeight / 32)
     currentElements.newModeParameters:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 24)
@@ -50,28 +43,28 @@ function createModeScreen:enter()
     currentElements.basicParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Basic", currentElements.basicParametersListTab, "Basic mode parameters")
 
-    modeParameters:addText(currentElements.basicParametersListTab, "Mode name")
+    parameters:addText(currentElements.basicParametersListTab, "Mode name")
     currentElements.nameInput = gui.Create("textinput")
     currentElements.basicParametersListTab:AddItem(currentElements.nameInput)
 
     currentElements.fontParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Font", currentElements.fontParametersListTab, "Font parameters")
-    modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Printed symbols maximum height", "printedSymbolsMaxHeight", 10, 1000, 1, 100)
-    modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Current symbol maximum height", "currentSymbolsMaxHeight", 10, 1000, 1, 100)
-    modeParameters:addIntegerNumberbox(currentElements.fontParametersListTab, "Unprinted symbols maximum height", "unprintedSymbolsMaxHeight", 10, 1000, 1, 100)
-    modeParameters:addTextInput(currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.ttf", "ttf")
-    modeParameters:addTextInput(currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.ttf", "ttf")
-    modeParameters:addTextInput(currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.ttf", "ttf")
-    modeParameters:addColorChanger(currentElements.fontParametersListTab, "Printed symbols color", "printedSymbolsColor", {0.5, 0.5, 0.5, 1})
-    modeParameters:addColorChanger(currentElements.fontParametersListTab, "Current symbol color", "currentSymbolColor", {0.5, 0.5, 0.5, 1})
-    modeParameters:addColorChanger(currentElements.fontParametersListTab, "Unprinted symbols color", "unprintedSymbolsColor", {0.5, 0.5, 0.5, 1})
+    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Printed symbols maximum height", "printedSymbolsMaxHeight", 10, 1000, 1, 100)
+    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Current symbol maximum height", "currentSymbolsMaxHeight", 10, 1000, 1, 100)
+    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Unprinted symbols maximum height", "unprintedSymbolsMaxHeight", 10, 1000, 1, 100)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.otf", "ttf")
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.otf", "ttf")
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.otf", "ttf")
+    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Printed symbols color", "printedSymbolsColor", {0.5, 0.5, 0.5, 1})
+    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Current symbol color", "currentSymbolColor", {0.5, 0.5, 0.5, 1})
+    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Unprinted symbols color", "unprintedSymbolsColor", {0.5, 0.5, 0.5, 1})
 
     currentElements.textParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Text", currentElements.textParametersListTab, "Text parameters")
-    modeParameters:addIntegerNumberbox(currentElements.textParametersListTab, "Text line length", "textLineLength", 1, 1000, 1)
-    modeParameters:addMultichoice(currentElements.textParametersListTab, "Content type", "contentType")
-    modeParameters:addTextInput(currentElements.textParametersListTab, "Allowed symbols", "allowedSymbols", textGenerator.englishLetters)
-    modeParameters:addTextInput(currentElements.textParametersListTab, "Text file name", "textFileName", "", "txt")
+    parameters:addIntegerNumberbox("mode", currentElements.textParametersListTab, "Text line length", "textLineLength", 1, 1000, 1)
+    parameters:addMultichoice("mode", currentElements.textParametersListTab, "Content type", "contentType")
+    parameters:addTextInput("mode", currentElements.textParametersListTab, "Allowed symbols", "allowedSymbols", textGenerator.englishLetters)
+    parameters:addTextInput("mode", currentElements.textParametersListTab, "Text file name", "textFileName", "", "txt")
     currentElements.contentTypeMultichoice:AddChoice("random characters from the set")
     currentElements.contentTypeMultichoice:AddChoice("text from the file")
     currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.allowedSymbolsTextInput, "random characters from the set")
@@ -92,7 +85,7 @@ function createModeScreen:enter()
 end
 
 function createModeScreen:filedropped(file)
-    for name, parameter in pairs(modeParameters.raw) do
+    for name, parameter in pairs(parameters.groups["mode"].raw) do
         if parameter.valueType == "string" then
             if parameter.element:GetParent().visible then
                 if mouseOnElement(parameter.element) then

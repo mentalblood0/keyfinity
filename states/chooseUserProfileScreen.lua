@@ -1,4 +1,4 @@
-local chooseUserProfileScreen = {defaultFontFileName = "font.ttf"}
+local chooseUserProfileScreen = {defaultFontFileName = "font.otf"}
 
 function chooseUserProfileScreen:updateElementsPositionAndSize()
     currentElements.chooseUserList:SetPos(windowWidth / 32, windowHeight / 32)

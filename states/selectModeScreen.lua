@@ -1,4 +1,4 @@
-local selectModeScreen = {defaultFontFileName = "font.ttf"}
+local selectModeScreen = {defaultFontFileName = "font.otf"}
 
 function selectModeScreen:updateElementsPositionAndSize()
     currentElements.selectModeList:SetPos(windowWidth / 32, windowHeight / 32)
