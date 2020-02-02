@@ -14,6 +14,12 @@ function selectModeScreen:updateElementsPositionAndSize()
     currentElements.selectModeList:SetEqualChildrenFontSize(selectModeScreen.defaultFontFileName)
 end
 
+function selectModeScreen:addModeButtons(modeName)
+    local newButton = complexGui:Create("modeButtons", modeName)
+    currentElements.selectModeList:AddItem(newButton)
+    currentElements[modeName .. "ModeButton"] = newButton
+end
+
 function selectModeScreen:enter()
     currentElements.selectModeList = gui.Create("list")
 
@@ -25,12 +31,7 @@ function selectModeScreen:enter()
         userProfiles[currentUserProfileName].modes = {}
     end
     for modeName, mode in next, userProfiles[currentUserProfileName].modes, nil do
-        local newButton = gui.Create("button")
-        newButton:SetHeight(100)
-        newButton:SetText(modeName)
-        newButton.OnClick = function(this) currentModeName = this:GetText(); switchToState("mainMenu") end
-
-        currentElements.selectModeList:AddItem(newButton)
+        selectModeScreen:addModeButtons(modeName)
     end
 end
 

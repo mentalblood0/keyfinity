@@ -5,36 +5,6 @@ local multiRefObjects = {
 local obj1 = {
 	["username"] = {
 		["modes"] = {
-			[""] = {
-				["currentSymbolColor"] = {
-					[1] = 0.50196078431373;
-					[2] = 0.50196078431373;
-					[3] = 0.50196078431373;
-					[4] = 1;
-				};
-				["currentSymbolsFontFileName"] = "font.otf";
-				["printedSymbolsFontFileName"] = "font.otf";
-				["textFileName"] = "";
-				["unprintedSymbolsColor"] = {
-					[1] = 0.50196078431373;
-					[2] = 0.50196078431373;
-					[3] = 0.50196078431373;
-					[4] = 1;
-				};
-				["printedSymbolsMaxHeight"] = 100;
-				["contentType"] = "random characters from the set";
-				["unprintedSymbolsFontFileName"] = "font.otf";
-				["currentSymbolsMaxHeight"] = 100;
-				["unprintedSymbolsMaxHeight"] = 100;
-				["allowedSymbols"] = "qwertyuiopasdfghjklzxcvbnm ";
-				["textLineLength"] = 1;
-				["printedSymbolsColor"] = {
-					[1] = 0.50196078431373;
-					[2] = 0.50196078431373;
-					[3] = 0.50196078431373;
-					[4] = 1;
-				};
-			};
 			["good"] = {
 				["currentSymbolColor"] = {
 					[1] = 0.56470588235294;
