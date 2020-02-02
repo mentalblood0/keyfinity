@@ -23,7 +23,7 @@ function modeButtons:Create(args)
     activateButton.RelativeX = 0
     activateButton.RelativeY = 0
     activateButton:SetText(args)
-    activateButton.OnClick = function(this) currentModeName = this.text; switchToState("selectModeScreen") end
+    activateButton.OnClick = function(this) currentModeName = this.text; switchToState("mainMenu") end
 
     local editButton = gui.Create("button", panel)
     editButton.RelativeWidth = 0.2

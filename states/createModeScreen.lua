@@ -34,6 +34,15 @@ function createModeScreen:updateElementsPositionAndSize()
 end
 
 function createModeScreen:enter()
+    local createModeButtonText = "Create"
+    local tableToLoadDefaultValueFrom = nil
+    local defaultModeName = ""
+    if editing then
+        createModeButtonText = "Save"
+        tableToLoadDefaultValueFrom = userProfiles[currentUserProfileName].modes[currentModeName]
+        defaultModeName = currentModeName
+    end
+
     parameters:newGroup("mode")
 
     currentElements.newModeParameters = gui.Create("tabs")
@@ -45,38 +54,35 @@ function createModeScreen:enter()
 
     parameters:addText(currentElements.basicParametersListTab, "Mode name")
     currentElements.nameInput = gui.Create("textinput")
+    currentElements.nameInput:SetText(defaultModeName)
     currentElements.basicParametersListTab:AddItem(currentElements.nameInput)
 
     currentElements.fontParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Font", currentElements.fontParametersListTab, "Font parameters")
-    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Printed symbols maximum height", "printedSymbolsMaxHeight", 10, 1000, 1, 100)
-    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Current symbol maximum height", "currentSymbolsMaxHeight", 10, 1000, 1, 100)
-    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Unprinted symbols maximum height", "unprintedSymbolsMaxHeight", 10, 1000, 1, 100)
-    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.otf", "ttf")
-    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.otf", "ttf")
-    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.otf", "ttf")
-    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Printed symbols color", "printedSymbolsColor", {0.5, 0.5, 0.5, 1})
-    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Current symbol color", "currentSymbolColor", {0.5, 0.5, 0.5, 1})
-    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Unprinted symbols color", "unprintedSymbolsColor", {0.5, 0.5, 0.5, 1})
+    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Printed symbols maximum height", "printedSymbolsMaxHeight", 10, 1000, 1, 100, tableToLoadDefaultValueFrom)
+    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Current symbol maximum height", "currentSymbolsMaxHeight", 10, 1000, 1, 100, tableToLoadDefaultValueFrom)
+    parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Unprinted symbols maximum height", "unprintedSymbolsMaxHeight", 10, 1000, 1, 100, tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.otf", "ttf", tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.otf", "ttf", tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.otf", "ttf", tableToLoadDefaultValueFrom)
+    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Printed symbols color", "printedSymbolsColor", {0.5, 0.5, 0.5, 1}, tableToLoadDefaultValueFrom)
+    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Current symbol color", "currentSymbolColor", {0.5, 0.5, 0.5, 1}, tableToLoadDefaultValueFrom)
+    parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Unprinted symbols color", "unprintedSymbolsColor", {0.5, 0.5, 0.5, 1}, tableToLoadDefaultValueFrom)
 
     currentElements.textParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Text", currentElements.textParametersListTab, "Text parameters")
-    parameters:addIntegerNumberbox("mode", currentElements.textParametersListTab, "Text line length", "textLineLength", 1, 1000, 1)
-    parameters:addMultichoice("mode", currentElements.textParametersListTab, "Content type", "contentType")
-    parameters:addTextInput("mode", currentElements.textParametersListTab, "Allowed symbols", "allowedSymbols", textGenerator.englishLetters)
-    parameters:addTextInput("mode", currentElements.textParametersListTab, "Text file name", "textFileName", "", "txt")
-    currentElements.contentTypeMultichoice:AddChoice("random characters from the set")
-    currentElements.contentTypeMultichoice:AddChoice("text from the file")
+    parameters:addIntegerNumberbox("mode", currentElements.textParametersListTab, "Text line length", "textLineLength", 1, 1000, 1, 20, tableToLoadDefaultValueFrom)
+    local contentTypeMultichoiceValues = {"random characters from the set", "text from the file"}
+    parameters:addMultichoice("mode", currentElements.textParametersListTab, "Content type", "contentType", "random characters from the set", contentTypeMultichoiceValues, tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.textParametersListTab, "Allowed symbols", "allowedSymbols", textGenerator.englishLetters, nil, tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.textParametersListTab, "Text file name", "textFileName", "", "txt", tableToLoadDefaultValueFrom)
     currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.allowedSymbolsTextInput, "random characters from the set")
     currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.textFileNameTextInput, "random characters from the set")
     currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.textFileNameTextInput, "text from the file")
     currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.allowedSymbolsTextInput, "text from the file")
-    for choice, content in pairs(currentElements.contentTypeMultichoice.choices) do
-        print(choice)
-    end
     
     currentElements.addButton = gui.Create("button")
-    currentElements.addButton:SetText("Create")
+    currentElements.addButton:SetText(createModeButtonText)
     currentElements.addButton.OnClick = function(this) createModeScreen:addButtonClick() end
 
     currentElements.cancelButton = gui.Create("button")

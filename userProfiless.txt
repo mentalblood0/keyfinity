@@ -5,50 +5,20 @@ local multiRefObjects = {
 local obj1 = {
 	["username"] = {
 		["modes"] = {
-			["good"] = {
+			["some mode name"] = {
 				["currentSymbolColor"] = {
-					[1] = 0.56470588235294;
-					[2] = 0.4156862745098;
-					[3] = 0.78039215686275;
+					[1] = 0.25882352941176;
+					[2] = 0.62745098039216;
+					[3] = 1;
 					[4] = 1;
 				};
-				["currentSymbolsFontFileName"] = "font.otf";
+				["currentSymbolsFontFileName"] = "Allia.ttf";
 				["printedSymbolsFontFileName"] = "font.otf";
-				["textFileName"] = "";
+				["textFileName"] = "some stupid file name";
 				["unprintedSymbolsColor"] = {
-					[1] = 0.88235294117647;
-					[2] = 0.32549019607843;
-					[3] = 0.50196078431373;
-					[4] = 1;
-				};
-				["printedSymbolsMaxHeight"] = 100;
-				["contentType"] = "text from the file";
-				["unprintedSymbolsFontFileName"] = "font.otf";
-				["currentSymbolsMaxHeight"] = 150;
-				["unprintedSymbolsMaxHeight"] = 100;
-				["allowedSymbols"] = "qwertyuiopasdfghjklzxcvbnm ";
-				["textLineLength"] = 1;
-				["printedSymbolsColor"] = {
-					[1] = 0.38039215686275;
-					[2] = 0.80392156862745;
-					[3] = 0.62352941176471;
-					[4] = 1;
-				};
-			};
-			["new"] = {
-				["currentSymbolColor"] = {
-					[1] = 0.5843137254902;
-					[2] = 0.31764705882353;
-					[3] = 0.81960784313725;
-					[4] = 1;
-				};
-				["currentSymbolsFontFileName"] = "font.otf";
-				["printedSymbolsFontFileName"] = "font.otf";
-				["textFileName"] = "";
-				["unprintedSymbolsColor"] = {
-					[1] = 0.96862745098039;
-					[2] = 0.27058823529412;
-					[3] = 0.63137254901961;
+					[1] = 1;
+					[2] = 0.30196078431373;
+					[3] = 0.082352941176471;
 					[4] = 1;
 				};
 				["printedSymbolsMaxHeight"] = 100;
@@ -56,12 +26,12 @@ local obj1 = {
 				["unprintedSymbolsFontFileName"] = "font.otf";
 				["currentSymbolsMaxHeight"] = 150;
 				["unprintedSymbolsMaxHeight"] = 100;
-				["allowedSymbols"] = "qwertyuiopasdfghjklzxcvbnm";
+				["allowedSymbols"] = "qwertyuiopasdfghjklzxcvbnm,. ";
 				["textLineLength"] = 30;
 				["printedSymbolsColor"] = {
-					[1] = 0.34509803921569;
-					[2] = 0.91764705882353;
-					[3] = 0.63921568627451;
+					[1] = 0;
+					[2] = 0.81960784313725;
+					[3] = 0.55294117647059;
 					[4] = 1;
 				};
 			};

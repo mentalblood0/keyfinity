@@ -28,7 +28,17 @@ function parameters:registerModeParameter(groupName, internalName, element, valu
     parameters.groups[groupName].raw[internalName].fileExtension = fileExtension
 end
 
-function parameters:addIntegerNumberbox(groupName, parentElement, name, internalName, minValue, maxValue, step, defaultValue)
+function parameters:loadDefaultValueFromTable(internalName, table)
+    return table[internalName]
+end
+
+function parameters:addIntegerNumberbox(groupName, parentElement, name, internalName, minValue, maxValue, step, defaultValue, tableToLoadDefaultValueFrom)
+    if tableToLoadDefaultValueFrom then
+        print("loading default value for numberbox")
+        defaultValue = parameters:loadDefaultValueFromTable(internalName, tableToLoadDefaultValueFrom)
+    end
+    print("default value is", defaultValue)
+
     local numberbox = gui.Create("numberbox")
     parameters:addText(parentElement, name, numberbox)
     parentElement:AddItem(numberbox)
@@ -43,7 +53,11 @@ function parameters:addIntegerNumberbox(groupName, parentElement, name, internal
     currentElements[internalName .. "Numberbox"] = numberbox
 end
 
-function parameters:addColorChanger(groupName, parentElement, name, internalName, defaultColor)
+function parameters:addColorChanger(groupName, parentElement, name, internalName, defaultColor, tableToLoadDefaultValueFrom)
+    if tableToLoadDefaultValueFrom then
+        defaultColor = parameters:loadDefaultValueFromTable(internalName, tableToLoadDefaultValueFrom)
+    end
+
     local colorChanger = complexGui:Create("colorChanger")
     parameters:addText(parentElement, name, colorChanger)
     colorChanger:setColor(defaultColor)
@@ -54,7 +68,11 @@ function parameters:addColorChanger(groupName, parentElement, name, internalName
     currentElements[internalName .. "ColorChanger"] = colorChanger
 end
 
-function parameters:addTextInput(groupName, parentElement, name, internalName, defaultValue, fileExtension)
+function parameters:addTextInput(groupName, parentElement, name, internalName, defaultValue, fileExtension, tableToLoadDefaultValueFrom)
+    if tableToLoadDefaultValueFrom then
+        defaultValue = parameters:loadDefaultValueFromTable(internalName, tableToLoadDefaultValueFrom)
+    end
+
     local textInput = gui.Create("textinput")
     parameters:addText(parentElement, name, textInput)
     parentElement:AddItem(textInput)
@@ -66,9 +84,17 @@ function parameters:addTextInput(groupName, parentElement, name, internalName, d
     currentElements[internalName .. "TextInput"] = textInput
 end
 
-function parameters:addMultichoice(groupName, parentElement, name, internalName)
+function parameters:addMultichoice(groupName, parentElement, name, internalName, defaultValue, choices, tableToLoadDefaultValueFrom)
+    if tableToLoadDefaultValueFrom then
+        defaultValue = parameters:loadDefaultValueFromTable(internalName, tableToLoadDefaultValueFrom)
+    end
+
     local multichoice = gui.Create("multichoice")
     parameters:addText(parentElement, name, multichoice)
+    for key, choice in pairs(choices) do
+        multichoice:AddChoice(choice)
+    end
+    multichoice:SetChoice(defaultValue)
     parentElement:AddItem(multichoice)
 
     parameters:registerModeParameter(groupName, internalName, multichoice, "choice")

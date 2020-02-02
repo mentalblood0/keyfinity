@@ -25,7 +25,7 @@ function chooseUserProfileScreen:enter()
 
     currentElements.addUserButton = gui.Create("button")
     currentElements.addUserButton:SetText("Add user")
-    currentElements.addUserButton.OnClick = function(this) switchToState("createUserScreen") end
+    currentElements.addUserButton.OnClick = function(this) editing = false switchToState("createUserScreen") end
 
     for userName, userProfile in next, userProfiles, nil do
         chooseUserProfileScreen:addUserButtons(userName)
