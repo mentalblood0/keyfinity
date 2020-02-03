@@ -62,9 +62,9 @@ function createModeScreen:enter()
     parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Printed symbols maximum height", "printedSymbolsMaxHeight", 10, 1000, 1, 100, tableToLoadDefaultValueFrom)
     parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Current symbol maximum height", "currentSymbolsMaxHeight", 10, 1000, 1, 100, tableToLoadDefaultValueFrom)
     parameters:addIntegerNumberbox("mode", currentElements.fontParametersListTab, "Unprinted symbols maximum height", "unprintedSymbolsMaxHeight", 10, 1000, 1, 100, tableToLoadDefaultValueFrom)
-    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.otf", "ttf", tableToLoadDefaultValueFrom)
-    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.otf", "ttf", tableToLoadDefaultValueFrom)
-    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.otf", "ttf", tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Printed symbols font", "printedSymbolsFontFileName", "font.otf", {ttf = true, otf = true}, tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Current symbol font", "currentSymbolsFontFileName", "font.otf", {ttf = true, otf = true}, tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.fontParametersListTab, "Unprinted symbols font", "unprintedSymbolsFontFileName", "font.otf", {ttf = true, otf = true}, tableToLoadDefaultValueFrom)
     parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Printed symbols color", "printedSymbolsColor", {0.5, 0.5, 0.5, 1}, tableToLoadDefaultValueFrom)
     parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Current symbol color", "currentSymbolColor", {0.5, 0.5, 0.5, 1}, tableToLoadDefaultValueFrom)
     parameters:addColorChanger("mode", currentElements.fontParametersListTab, "Unprinted symbols color", "unprintedSymbolsColor", {0.5, 0.5, 0.5, 1}, tableToLoadDefaultValueFrom)
@@ -75,7 +75,7 @@ function createModeScreen:enter()
     local contentTypeMultichoiceValues = {"random characters from the set", "text from the file"}
     parameters:addMultichoice("mode", currentElements.textParametersListTab, "Content type", "contentType", "random characters from the set", contentTypeMultichoiceValues, tableToLoadDefaultValueFrom)
     parameters:addTextInput("mode", currentElements.textParametersListTab, "Allowed symbols", "allowedSymbols", textGenerator.englishLetters, nil, tableToLoadDefaultValueFrom)
-    parameters:addTextInput("mode", currentElements.textParametersListTab, "Text file name", "textFileName", "", "txt", tableToLoadDefaultValueFrom)
+    parameters:addTextInput("mode", currentElements.textParametersListTab, "Text file name", "textFileName", "", {txt = true}, tableToLoadDefaultValueFrom)
     currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.allowedSymbolsTextInput, "random characters from the set")
     currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.textFileNameTextInput, "random characters from the set")
     currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.textFileNameTextInput, "text from the file")
@@ -96,7 +96,7 @@ function createModeScreen:filedropped(file)
             if parameter.element:GetParent().visible then
                 if mouseOnElement(parameter.element) then
                     if parameter.fileExtension then
-                        if parameter.fileExtension == extensionOf(file) then
+                        if parameter.fileExtension[extensionOf(file)] then
                             local fileName = createFileCopy(file)
                             parameter.element:SetText(fileName)
                         end

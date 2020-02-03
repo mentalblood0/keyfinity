@@ -12,7 +12,7 @@ local obj1 = {
 					[3] = 1;
 					[4] = 1;
 				};
-				["currentSymbolsFontFileName"] = "Allia.ttf";
+				["currentSymbolsFontFileName"] = "[3ST] ApexSerif_Book.otf";
 				["printedSymbolsFontFileName"] = "font.otf";
 				["textFileName"] = "some stupid file name";
 				["unprintedSymbolsColor"] = {
