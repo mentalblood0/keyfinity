@@ -137,11 +137,14 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	object.getProperFontSize = function(this, fontFileName)
+		if this.parent.type == "list" then
+			print("proper font size for", this.type, "is", fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this:GetText()))
+		end
 		return fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this:GetText())
 	end
 
 	object.setProperFontSize = function(this, fontFileName)
-		if (not this.text) and (not this.value) and (not (this:GetType() == "numberbox")) then
+		if (not this.text) and (not this.value) and (not (this:GetType() == "numberbox")) and (not (this.type == "textinput")) then
 			return
 		end
 		this.fontFileName = fontFileName
@@ -174,19 +177,22 @@ function loveframes.NewObject(id, name, inherit_from_base)
 				return
 			end
 			local minFontSize = 0
-			for key, value in next, children, nil do
-				if children[key].GetText and children[key]:GetText() then
-					local currentChildFontSize = children[key]:getProperFontSize(fontFileName)
+			for key, child in pairs(children) do
+				if child.text or (child.type == "textinput") or (child.type == "numberbox") then
+					local currentChildFontSize = child:getProperFontSize(fontFileName)
 					if (currentChildFontSize < minFontSize) or (minFontSize == 0) then
 						minFontSize = currentChildFontSize
 					end
 				end
 			end
-			for key, value in next, children, nil do
-				if children[key].GetText and children[key]:GetText() then
-					children[key]:SetFont(love.graphics.newFont(fontFileName, minFontSize))
+			print(minFontSize)
+			for key, child in pairs(children) do
+				if child.text or (child.type == "textinput") or (child.type == "numberbox") then
+					print("setting font size", minFontSize, "for", child.type)
+					child:SetFont(love.graphics.newFont(fontFileName, minFontSize))
 				end
 			end
+			print("ended setting equal children font size")
 		end
 
 		object.SetChildrenHeight = function(this, height)
@@ -197,12 +203,9 @@ function loveframes.NewObject(id, name, inherit_from_base)
 		end
 
 	elseif name == "loveframes_object_text" then
-		object.SetHeight = function(this, height)
-			this.height = height
-			if not this.fontFileName then
-				this.fontFileName = currentState.defaultFontFileName
-			end
-			this:setProperFontSize(this.fontFileName)
+		object.SetHeight = function(this, newHeight)
+			print("set text height", newHeight)
+			this.height = newHeight
 		end
 	elseif name == "loveframes_object_tabs" then
 		object.setChildrenSize = function(this, newWidth, newHeight)

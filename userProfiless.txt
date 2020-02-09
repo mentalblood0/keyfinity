@@ -7,31 +7,31 @@ local obj1 = {
 		["modes"] = {
 			["some mode name"] = {
 				["currentSymbolColor"] = {
-					[1] = 0.25882352941176;
-					[2] = 0.62745098039216;
+					[1] = 0.61960784313725;
+					[2] = 0.89019607843137;
 					[3] = 1;
 					[4] = 1;
 				};
-				["currentSymbolsFontFileName"] = "[3ST] ApexSerif_Book.otf";
+				["currentSymbolsFontFileName"] = "font.otf";
 				["printedSymbolsFontFileName"] = "font.otf";
-				["textFileName"] = "some stupid file name";
+				["textFileName"] = "";
 				["unprintedSymbolsColor"] = {
 					[1] = 1;
-					[2] = 0.30196078431373;
-					[3] = 0.082352941176471;
+					[2] = 0.62352941176471;
+					[3] = 0.80392156862745;
 					[4] = 1;
 				};
 				["printedSymbolsMaxHeight"] = 100;
 				["contentType"] = "random characters from the set";
 				["unprintedSymbolsFontFileName"] = "font.otf";
-				["currentSymbolsMaxHeight"] = 150;
+				["currentSymbolsMaxHeight"] = 100;
 				["unprintedSymbolsMaxHeight"] = 100;
 				["allowedSymbols"] = "qwertyuiopasdfghjklzxcvbnm,. ";
-				["textLineLength"] = 30;
+				["textLineLength"] = 20;
 				["printedSymbolsColor"] = {
-					[1] = 0;
-					[2] = 0.81960784313725;
-					[3] = 0.55294117647059;
+					[1] = 0.54509803921569;
+					[2] = 0.87450980392157;
+					[3] = 0.16470588235294;
 					[4] = 1;
 				};
 			};

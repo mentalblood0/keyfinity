@@ -437,7 +437,7 @@ function newobject:SetText(t)
 		self.width = textwidth
 	end
 	
-	self.height = drawy + prevlargestheight
+	--self.height = drawy + prevlargestheight
 	return self
 	
 end
@@ -625,10 +625,6 @@ function newobject:SetWidth(width, relative)
 	
 end
 
-function newobject:SetHeight(newHeight)
-	self.height = newHeight
-end
-
 function newobject:GetHeight()
 	return self.height
 end
@@ -662,19 +658,6 @@ end
 	- desc: sets the object's font
 	- note: font argument must be a font object
 --]]---------------------------------------------------------
-function newobject:SetFont(font)
-
-	local original = self.original
-	
-	self.font = font
-	
-	if original then
-		self:SetText(original)
-	end
-	
-	return self
-	
-end
 
 --[[---------------------------------------------------------
 	- func: GetFont()

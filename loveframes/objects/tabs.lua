@@ -42,15 +42,6 @@ function newobject:initialize()
 	self:SetDrawFunc()
 end
 
-function newobject:setChildrenPaddingSpacingEtc(padding, spacing, childrenHeight, childrenFontFileName)
-	for key, child in next, self.children, nil do
-		child:SetPadding(padding)
-		child:SetSpacing(spacing)
-		child:SetChildrenHeight(childrenHeight)
-		child:SetEqualChildrenFontSize(childrenFontFileName)
-	end
-end
-
 function newobject:setTabsFont(font)
 	for internalObjectIndex, internalObject in next, self.internals, nil do
 		self.internals[internalObjectIndex]:SetFont(font)

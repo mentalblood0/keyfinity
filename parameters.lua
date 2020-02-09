@@ -34,10 +34,8 @@ end
 
 function parameters:addIntegerNumberbox(groupName, parentElement, name, internalName, minValue, maxValue, step, defaultValue, tableToLoadDefaultValueFrom)
     if tableToLoadDefaultValueFrom then
-        print("loading default value for numberbox")
         defaultValue = parameters:loadDefaultValueFromTable(internalName, tableToLoadDefaultValueFrom)
     end
-    print("default value is", defaultValue)
 
     local numberbox = gui.Create("numberbox")
     parameters:addText(parentElement, name, numberbox)

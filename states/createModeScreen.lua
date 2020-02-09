@@ -14,6 +14,46 @@ function createModeScreen:addButtonClick()
     switchToState("selectModeScreen")
 end
 
+function createModeScreen:setTextHeight(newHeight)
+    for key, element in pairs(currentElements) do
+        if element:GetType() == "text" then
+            element:SetHeight(newHeight)
+        end
+    end
+end
+
+createModeScreen.style = {
+    relativeToWindow = {
+        listElementsPadding = 1 / 64,
+        listElementsSpacing = 1 / 64,
+        height = {
+            text = 0.07,
+            numberbox = 0.06,
+            textinput = 0.06,
+            colorChanger = 0.2,
+            multichoice = 0.06
+        }
+    }
+}
+
+function setTabsChildrenStyle(tabs, style)
+    local children = tabs:GetChildren()
+    for key, tab in pairs(children) do
+        print("processing tab with key", key)
+        local tabChildren = tab:GetChildren()
+        for key, child in pairs(tabChildren) do
+            child:SetHeight(style.relativeToWindow.height[child:GetType()] * windowHeight)
+            child:setProperFontSize(currentState.defaultFontFileName)
+            print(child:GetType(), style.relativeToWindow.height[child:GetType()], child.height)
+        end
+        tab:SetPadding(style.relativeToWindow.listElementsPadding * windowWidth)
+        tab:SetSpacing(style.relativeToWindow.listElementsSpacing * windowHeight)
+        --tab:SetEqualChildrenFontSize(createModeScreen.defaultFontFileName)
+        tab:CalculateSize()
+        tab:RedoLayout()
+    end
+end
+
 function createModeScreen:updateElementsPositionAndSize()
     currentElements.newModeParameters:SetPos(windowWidth / 32, windowHeight / 32)
     currentElements.newModeParameters:SetSize(windowWidth / 32 * 30, windowHeight / 32 * 24)
@@ -22,7 +62,7 @@ function createModeScreen:updateElementsPositionAndSize()
     currentElements.newModeParameters:setChildrenSize(windowWidth / 32 * 30, windowHeight / 32 * 24 - currentElements.newModeParameters:GetHeightOfButtons())
     currentElements.newModeParameters:setProperTabsFontSize(createModeScreen.defaultFontFileName)
 
-    currentElements.newModeParameters:setChildrenPaddingSpacingEtc(windowWidth / 64, windowHeight / 64, windowHeight / 10, createModeScreen.defaultFontFileName)
+    setTabsChildrenStyle(currentElements.newModeParameters, createModeScreen.style)
 
     currentElements.addButton:SetPos(windowWidth / 32, windowHeight / 32 * 26)
     currentElements.addButton:SetSize(windowWidth / 32 * 14, windowHeight / 32 * 4)
