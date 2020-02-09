@@ -1,6 +1,10 @@
 local createModeScreen = {defaultFontFileName = "font.otf"}
 
 function createModeScreen:addButtonClick()
+    if editing then
+        userProfiles[currentUserProfileName].modes[currentModeName] = nil
+    end
+    
     local newModeName = currentElements.nameInput:GetText()
     if userProfiles[currentUserProfileName].modes == nil then
         userProfiles[currentUserProfileName].modes = {}
@@ -120,6 +124,9 @@ function createModeScreen:enter()
     currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.textFileNameTextInput, "random characters from the set")
     currentElements.contentTypeMultichoice:showElementOnChoice(currentElements.textFileNameTextInput, "text from the file")
     currentElements.contentTypeMultichoice:hideElementOnChoice(currentElements.allowedSymbolsTextInput, "text from the file")
+
+    currentElements.statsParametersListTab = gui.Create("list")
+    currentElements.newModeParameters:AddTab("Stats", currentElements.statsParametersListTab, "Showing statistics parameters")
     
     currentElements.addButton = gui.Create("button")
     currentElements.addButton:SetText(createModeButtonText)
