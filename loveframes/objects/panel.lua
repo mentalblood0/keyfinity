@@ -20,8 +20,13 @@ function newobject:initialize()
 	self.height = 50
 	self.internal = false
 	self.children = {}
-	
+	self.color = {fill = {0.6, 0.6, 0.6, 1}, outline = {0.8, 0.8, 0.8, 1}}
+
 	self:SetDrawFunc()
+end
+
+function newobject:GetColor()
+	return self.color
 end
 
 --[[---------------------------------------------------------

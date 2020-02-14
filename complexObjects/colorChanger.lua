@@ -37,7 +37,7 @@ function colorChanger:Create(args)
 	slider1Value.RelativeX = 0.4
 	slider1Value.RelativeY = 0.15
 	slider1Value.Update = function(object)
-		local text = {{color = {1, 0, 0}}, "Red: " .. slider1:GetValue()}
+		local text = {{color = {1, 0, 0}}, "Red: " .. object:GetValue()}
 		object:SetText(text)
 	end
 	
@@ -60,7 +60,7 @@ function colorChanger:Create(args)
 	slider2Value.RelativeX = 0.4
 	slider2Value.RelativeY = 0.45
 	slider2Value.Update = function(object)
-		local text = {{color = {0, 0.6, 0}}, "Green: " .. slider2:GetValue()}
+		local text = {{color = {0, 0.6, 0}}, "Green: " .. object:GetValue()}
 		object:SetText(text)
 	end
 	
@@ -83,7 +83,7 @@ function colorChanger:Create(args)
 	slider3Value.RelativeX = 0.4
 	slider3Value.RelativeY = 0.75
 	slider3Value.Update = function(object)
-		local text = {{color = {0, 0, 1}}, "Blue: " .. slider3:GetValue()}
+		local text = {{color = {0, 0, 1}}, "Blue: " .. object:GetValue()}
 		object:SetText(text)
 	end
 

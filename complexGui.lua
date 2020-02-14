@@ -18,6 +18,10 @@ function complexGui:Create(objectName, args)
     object.complex = objectName
     object.type = objectName
     object.updateChildrenPositionAndSize = function(this)
+        local children = this:GetChildren()
+        if not children then
+            return
+        end
 		for key, child in pairs(this:GetChildren()) do
             child:updatePositionAndSizeRelativeToParent()
             child:setProperFontSize(currentState.defaultFontFileName)

@@ -100,6 +100,18 @@ function parameters:addMultichoice(groupName, parentElement, name, internalName,
     currentElements[internalName .. "Multichoice"] = multichoice
 end
 
+function parameters:addScreenElementsEditor(parentElement, name, internalName)
+    local screenElementsEditor = complexGui:Create("screenElementsEditor")
+    parameters:addText(parentElement, name, screenElementsEditor)
+    screenElementsEditor:addElement()
+    screenElementsEditor:addElement()
+    screenElementsEditor:addElement()
+
+    parentElement:AddItem(screenElementsEditor)
+
+    currentElements[internalName .. "ScreenElementsEditor"] = screenElementsEditor
+end
+
 function parameters:convert(groupName)
     parameters.groups[groupName].converted = {}
     for parameterInternalName, parameter in pairs(parameters.groups[groupName].raw) do

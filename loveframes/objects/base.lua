@@ -72,11 +72,15 @@ function getTheGrandestParentThatIsList(element)
 	return result
 end
 
-function rectsIntersection(rect1, rect2)
+function rectsIntersect(rect1, rect2)
 	intersection = {x = math.max(rect1.x, rect2.x), y = math.max(rect1.y, rect2.y)}
 	intersection.width = math.min(rect1.x + rect2.width, rect2.x + rect2.width) - intersection.x
 	intersection.height = math.min(rect1.y + rect2.height, rect2.y + rect2.height) - intersection.y
 	return intersection
+end
+
+function rectangleIntoRectangle(rect1, rect2)
+	return ((rect1.x > rect2.x) and ((rect1.x + rect1.width) < (rect2.x + rect2.width))) and ((rect1.y > rect2.y) and ((rect1.y + rect1.height) < (rect2.y + rect2.height)))
 end
 
 local stencilParent = nil
@@ -92,7 +96,7 @@ function startStencil(element)
 		return
 	end
 	parentRect = {x = stencilParent:GetX(), y = stencilParent:GetY(), width = stencilParent:GetWidth(), height = stencilParent:GetHeight()}
-	local intersection = rectsIntersection({x = x, y = y, width = width, height = height}, parentRect)
+	local intersection = rectsIntersect({x = x, y = y, width = width, height = height}, parentRect)
 	local stencilfunc = function() love.graphics.rectangle("fill", intersection.x, intersection.y, intersection.width, intersection.height) end
 
 	love.graphics.stencil(stencilfunc)
@@ -670,7 +674,7 @@ function newobject:SetParent(parent)
 	local stype = self.type
 	
 	if ptype ~= "frame" and ptype ~= "panel" and ptype ~= "list" then
-		return
+	--	return
 	end
 	
 	self:Remove()

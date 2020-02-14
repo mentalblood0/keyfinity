@@ -634,14 +634,12 @@ function skin.panel(object)
 	local y = object:GetY()
 	local width = object:GetWidth()
 	local height = object:GetHeight()
+	local color = object:GetColor()
 	
-	love.graphics.setColor(skin.controls.color_back1)
+	love.graphics.setColor(color.fill)
 	love.graphics.rectangle("fill", x, y, width, height)
 	
-	--love.graphics.setColor(skin.controls.color_back1)
-	--skin.OutlinedRectangle(x + 1, y + 1, width - 2, height - 2)
-	
-	love.graphics.setColor(skin.controls.color_back2)
+	love.graphics.setColor(color.outline)
 	skin.OutlinedRectangle(x, y, width, height)
 	
 end

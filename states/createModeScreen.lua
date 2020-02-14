@@ -35,7 +35,8 @@ createModeScreen.style = {
             numberbox = 0.06,
             textinput = 0.06,
             colorChanger = 0.2,
-            multichoice = 0.06
+            multichoice = 0.06,
+            screenElementsEditor = 0.4
         }
     }
 }
@@ -127,6 +128,7 @@ function createModeScreen:enter()
 
     currentElements.statsParametersListTab = gui.Create("list")
     currentElements.newModeParameters:AddTab("Stats", currentElements.statsParametersListTab, "Showing statistics parameters")
+    parameters:addScreenElementsEditor(currentElements.statsParametersListTab, "elements on screen", "elementsOnScreen")
     
     currentElements.addButton = gui.Create("button")
     currentElements.addButton:SetText(createModeButtonText)
