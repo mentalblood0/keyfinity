@@ -152,7 +152,14 @@ function loveframes.NewObject(id, name, inherit_from_base)
 
 	object.updatePositionAndSizeRelativeToParent = function(this)
 		if this.RelativeWidth and this.RelativeHeight then
-			this:SetSize(this.RelativeWidth * this.parent.width, this.RelativeHeight * this.parent.height)
+			local newWidth = this.RelativeWidth * this.parent.width
+			local newHeight = this.RelativeHeight * this.parent.height
+			if this.sidesAreEqual then
+				local minSideLength = math.min(newWidth, newHeight)
+				this:SetSize(minSideLength, minSideLength)
+			else
+				this:SetSize(newWidth, newHeight)
+			end
 		end
 		if this.RelativeX and this.RelativeY then
 			this:SetPos(this.RelativeX * this.parent.width, this.RelativeY * this.parent.height, this.center)
@@ -172,8 +179,13 @@ function loveframes.NewObject(id, name, inherit_from_base)
 			this.RelativeHeight = this.height / this.parent.height
 		end
 		if this.RelativeX and this.RelativeY then
-			this.RelativeX = (this.x - this.parent.x) / this.parent.width
-			this.RelativeY = (this.y - this.parent.y) / this.parent.height
+			if this.center then
+				this.RelativeX = (this.x + this.width / 2 - this.parent.x) / this.parent.width
+				this.RelativeY = (this.y + this.height / 2 - this.parent.y) / this.parent.height
+			else
+				this.RelativeX = (this.x - this.parent.x) / this.parent.width
+				this.RelativeY = (this.y - this.parent.y) / this.parent.height
+			end
 		end
 	end
 

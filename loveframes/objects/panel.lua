@@ -106,6 +106,11 @@ function newobject:mousepressed(x, y, button)
 	for k, v in ipairs(children) do
 		v:mousepressed(x, y, button)
 	end
+
+	Mousepressed = self.Mousepressed
+	if Mousepressed then
+		Mousepressed(self, x, y, button)
+	end
 	
 end
 
@@ -133,6 +138,11 @@ function newobject:mousereleased(x, y, button)
 		v:mousereleased(x, y, button)
 	end
 	
+	Mousereleased = self.Mousereleased
+	if Mousereleased then
+		Mousereleased(self, x, y, button)
+	end
+
 end
 
 ---------- module end ----------

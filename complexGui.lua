@@ -13,8 +13,7 @@ function complexGui:searchAndAddObjects()
     end
 end
 
-function complexGui:Create(objectName, args)
-    local object = complexGui.objects[objectName]:Create(args)
+function complexGui:makeComplex(object, objectName)
     object.complex = objectName
     object.type = objectName
     object.updateChildrenPositionAndSize = function(this)
@@ -22,14 +21,21 @@ function complexGui:Create(objectName, args)
         if not children then
             return
         end
-		for key, child in pairs(this:GetChildren()) do
-            child:updatePositionAndSizeRelativeToParent()
+        for key, child in pairs(this:GetChildren()) do
+            if not (child.isResizeButton and child.dragging) then
+                child:updatePositionAndSizeRelativeToParent()
+            end
             child:setProperFontSize(currentState.defaultFontFileName)
             if child.complex then
                 child:updateChildrenPositionAndSize()
             end
         end
     end
+end
+
+function complexGui:Create(objectName, args)
+    local object = complexGui.objects[objectName]:Create(args)
+    complexGui:makeComplex(object, objectName)
 
     return object
 end

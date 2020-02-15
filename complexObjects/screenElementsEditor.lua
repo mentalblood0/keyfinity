@@ -1,5 +1,84 @@
 local screenElementsEditor = {}
 
+function makeDraggable(element, boundingElement)
+    local getBoundingElement
+    if boundingElement then
+        getBoundingElement = function(this) return boundingElement end
+    else
+        getBoundingElement = function(this) return this.parent end
+    end
+
+    element.dragging = false
+
+    element.Mousepressed = function(this, x, y, button)
+        if mouseOnElement(this) then
+            this.dragging = {dx = x - this.x, dy = y - this.y}
+            return
+        end
+    end
+
+    element.Mousereleased = function(this, x, y, button)
+        if this.dragging then
+            this:updateRelativePositionAndSize()
+            this.dragging = false
+        end
+    end
+
+    element.Update = function(this, dt)
+        if this.dragging then
+            local mouseX = love.mouse.getX()
+            local mouseY = love.mouse.getY()
+            local dx = this.dragging.dx
+            local dy = this.dragging.dy
+            local boundingElement = getBoundingElement(this)
+            local newPosition = {x = mouseX - dx, y = mouseY - dy}
+            if newPosition.x < boundingElement.x then
+                this:SetX(boundingElement.x - this.parent.x)
+            elseif (newPosition.x + this.width) > (boundingElement.x + boundingElement.width) then
+                this:SetX(boundingElement.x + boundingElement.width - this.width - this.parent.x)
+            else
+                this:SetX(newPosition.x - this.parent.x)
+            end
+            
+            if newPosition.y < boundingElement.y then
+                this:SetY(boundingElement.y - this.parent.y)
+            elseif (newPosition.y + this.height) > (boundingElement.y + boundingElement.height) then
+                this:SetY(boundingElement.y + boundingElement.height - this.height - this.parent.y)
+            else
+                this:SetY(newPosition.y - this.parent.y)
+            end
+
+            if this.onDragging then
+                this:onDragging()
+            end
+        end
+    end
+end
+
+function makeResizeble(element)
+    if not element.complex then
+        complexGui:makeComplex(element, "resizeble")
+    end
+
+    local resizeButton = gui.Create("panel", element)
+    resizeButton.isResizeButton = true
+    resizeButton.color = {fill = {0.9, 0.9, 0.9, 0.5}, outline = {1, 1, 1, 1}}
+    resizeButton.sidesAreEqual = true
+    resizeButton.center = true
+    resizeButton.RelativeX = 1
+    resizeButton.RelativeY = 1
+    resizeButton.RelativeWidth = 0.5
+    resizeButton.RelativeHeight = 0.5
+    makeDraggable(resizeButton, element.parent)
+    resizeButton.onDragging = function(this)
+        this.parent:SetWidth(this.x + this.width / 2 - this.parent.x)
+        this.parent:SetHeight(this.y + this.height / 2 - this.parent.y)
+        this:updateRelativePositionAndSize()
+        this.parent:updateRelativePositionAndSize()
+        this.parent:updateChildrenPositionAndSize()
+    end
+end
+
 function screenElementsEditor:Create(args)
     local panel = gui.Create("panel")
     if args then
@@ -9,60 +88,16 @@ function screenElementsEditor:Create(args)
     
     panel.addElement = function(this, label, relativeX, relativeY, relativeWidth, relativeHeight, color)
         local newElement = complexGui:Create("labeledPanel", {label = label or "label"})
-        newElement.RelativeX = relativeX or 0.35
-        newElement.RelativeY = relativeY or 0.35
+        newElement.RelativeX = relativeX or math.random() * 0.7
+        newElement.RelativeY = relativeY or math.random() * 0.7
         newElement.RelativeWidth = relativeWidth or 0.3
         newElement.RelativeHeight = relativeHeight or 0.3
         newElement.color = color or {fill = {0.9, 0.9, 0.9, 0.5}, outline = {1, 1, 1, 1}}
-        newElement.dragging = false
         newElement:SetParent(this)
+        makeDraggable(newElement)
+        makeResizeble(newElement)
+
         table.insert(this.elements, newElement)
-    end
-
-    panel.mousepressed = function(this, x, y, button)
-        for key, element in pairs(this.elements) do
-            if mouseOnElement(element) then
-                print(x, y, element:GetX(), element:GetY())
-                element.dragging = {dx = x - element:GetX(), dy = y - element:GetY()}
-                return
-            end
-        end
-    end
-
-    panel.mousereleased = function(this, x, y, button)
-        for key, element in pairs(this.elements) do
-            if element.dragging then
-                element:updateRelativePositionAndSize()
-                element.dragging = false
-            end
-        end
-    end
-
-    panel.Update = function(this, dt)
-        for key, element in pairs(this.elements) do
-            if element.dragging then
-                local mouseX = love.mouse.getX()
-                local mouseY = love.mouse.getY()
-                local dx = element.dragging.dx
-                local dy = element.dragging.dy
-                local newPosition = {x = mouseX - dx - this:GetX(), y = mouseY - dy - this:GetY(), width = element.width, height = element.height}
-                if newPosition.x < 0 then
-                    element:SetX(0)
-                elseif (newPosition.x + newPosition.width) > this.width then
-                    element:SetX(this.width - element.width)
-                else
-                    element:SetX(newPosition.x)
-                end
-                
-                if newPosition.y < 0 then
-                    element:SetY(0)
-                elseif (newPosition.y + newPosition.height) > this.height then
-                    element:SetY(this.height - element.height)
-                else
-                    element:SetY(newPosition.y)
-                end
-            end
-        end
     end
 
     return panel
