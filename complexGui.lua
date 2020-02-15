@@ -25,6 +25,9 @@ function complexGui:Create(objectName, args)
 		for key, child in pairs(this:GetChildren()) do
             child:updatePositionAndSizeRelativeToParent()
             child:setProperFontSize(currentState.defaultFontFileName)
+            if child.complex then
+                child:updateChildrenPositionAndSize()
+            end
         end
     end
 

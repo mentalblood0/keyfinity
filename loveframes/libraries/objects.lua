@@ -137,9 +137,6 @@ function loveframes.NewObject(id, name, inherit_from_base)
 	end
 
 	object.getProperFontSize = function(this, fontFileName)
-		if this.parent.type == "list" then
-			print("proper font size for", this.type, "is", fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this:GetText()))
-		end
 		return fonting:fontSizeToFitIntoRect(fontFileName, this.width, this.height, this:GetText())
 	end
 
@@ -155,17 +152,28 @@ function loveframes.NewObject(id, name, inherit_from_base)
 
 	object.updatePositionAndSizeRelativeToParent = function(this)
 		if this.RelativeWidth and this.RelativeHeight then
-			this:SetSize(this.RelativeWidth * this:GetParent():GetWidth(), this.RelativeHeight * this:GetParent():GetHeight())
+			this:SetSize(this.RelativeWidth * this.parent.width, this.RelativeHeight * this.parent.height)
 		end
 		if this.RelativeX and this.RelativeY then
-			this:SetPos(this.RelativeX * this:GetParent():GetWidth(), this.RelativeY * this:GetParent():GetHeight())
+			this:SetPos(this.RelativeX * this.parent.width, this.RelativeY * this.parent.height, this.center)
 		end
 		if this.RelativeButtonSize then
-			local minParentSideSize = math.min(this:GetParent():GetWidth(), this:GetParent():GetHeight())
+			local minParentSideSize = math.min(this.parent.width, this.parent.height)
 			this:SetButtonSize(this.RelativeButtonSize * minParentSideSize, this.RelativeButtonSize * minParentSideSize)
 		end
 		if this:GetType() == "slider" then
 			this:SetValue(this:GetValue())
+		end
+	end
+
+	object.updateRelativePositionAndSize = function(this)
+		if this.RelativeWidth and this.RelativeHeight then
+			this.RelativeWidth = this.width / this.parent.width
+			this.RelativeHeight = this.height / this.parent.height
+		end
+		if this.RelativeX and this.RelativeY then
+			this.RelativeX = (this.x - this.parent.x) / this.parent.width
+			this.RelativeY = (this.y - this.parent.y) / this.parent.height
 		end
 	end
 
@@ -185,14 +193,11 @@ function loveframes.NewObject(id, name, inherit_from_base)
 					end
 				end
 			end
-			print(minFontSize)
 			for key, child in pairs(children) do
 				if child.text or (child.type == "textinput") or (child.type == "numberbox") then
-					print("setting font size", minFontSize, "for", child.type)
 					child:SetFont(love.graphics.newFont(fontFileName, minFontSize))
 				end
 			end
-			print("ended setting equal children font size")
 		end
 
 		object.SetChildrenHeight = function(this, height)
@@ -204,7 +209,6 @@ function loveframes.NewObject(id, name, inherit_from_base)
 
 	elseif name == "loveframes_object_text" then
 		object.SetHeight = function(this, newHeight)
-			print("set text height", newHeight)
 			this.height = newHeight
 		end
 	elseif name == "loveframes_object_tabs" then

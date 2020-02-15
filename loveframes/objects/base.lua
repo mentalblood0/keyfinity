@@ -330,8 +330,8 @@ function newobject:SetPos(x, y, center)
 	local parent = self.parent
 	
 	if center then
-		local width = self.width
-		local height = self.height
+		local width = ((self.type == "text") and self.font:getWidth(self.text)) or self.width
+		local height = ((self.type == "text") and self.font:getHeight(self.text)) or self.height
 		x = x - width/2
 		y = y - height/2
 	end

@@ -7,10 +7,10 @@ function screenElementsEditor:Create(args)
     end
     panel.elements = {}
     
-    panel.addElement = function(this, relativeX, relativeY, relativeWidth, relativeHeight, color)
-        local newElement = gui.Create("panel")
-        newElement.RelativeX = relativeX or 0.3
-        newElement.RelativeY = relativeY or 0.3
+    panel.addElement = function(this, label, relativeX, relativeY, relativeWidth, relativeHeight, color)
+        local newElement = complexGui:Create("labeledPanel", {label = label or "label"})
+        newElement.RelativeX = relativeX or 0.35
+        newElement.RelativeY = relativeY or 0.35
         newElement.RelativeWidth = relativeWidth or 0.3
         newElement.RelativeHeight = relativeHeight or 0.3
         newElement.color = color or {fill = {0.9, 0.9, 0.9, 0.5}, outline = {1, 1, 1, 1}}
@@ -31,7 +31,10 @@ function screenElementsEditor:Create(args)
 
     panel.mousereleased = function(this, x, y, button)
         for key, element in pairs(this.elements) do
-            element.dragging = false
+            if element.dragging then
+                element:updateRelativePositionAndSize()
+                element.dragging = false
+            end
         end
     end
 

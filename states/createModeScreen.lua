@@ -44,12 +44,14 @@ createModeScreen.style = {
 function setTabsChildrenStyle(tabs, style)
     local children = tabs:GetChildren()
     for key, tab in pairs(children) do
-        print("processing tab with key", key)
         local tabChildren = tab:GetChildren()
         for key, child in pairs(tabChildren) do
             child:SetHeight(style.relativeToWindow.height[child:GetType()] * windowHeight)
-            child:setProperFontSize(currentState.defaultFontFileName)
-            print(child:GetType(), style.relativeToWindow.height[child:GetType()], child.height)
+            if child.complex then
+                child:updateChildrenPositionAndSize()
+            else
+                child:setProperFontSize(currentState.defaultFontFileName)
+            end
         end
         tab:SetPadding(style.relativeToWindow.listElementsPadding * windowWidth)
         tab:SetSpacing(style.relativeToWindow.listElementsSpacing * windowHeight)
